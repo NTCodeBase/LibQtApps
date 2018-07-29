@@ -46,7 +46,7 @@ bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev)
     switch(ev->key()) {
         case Qt::Key_Escape:
             close();
-            __BANANA_EARLY_TERMINATION
+            __NT_EARLY_TERMINATION
         //exit(EXIT_SUCCESS);
 
         default:
@@ -125,7 +125,7 @@ void OpenGLMainWindow::updateStatusCameraInfo(const Vec3f& camPosition, const Ve
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget)
 {
-    __BNN_REQUIRE(glWidget != nullptr);
+    __NT_REQUIRE(glWidget != nullptr);
     if(m_GLWidget != nullptr) {
         delete m_GLWidget;
     }

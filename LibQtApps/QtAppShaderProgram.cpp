@@ -51,7 +51,7 @@ void QtAppShaderProgram::loadResourceFile(std::string& fileContent, const char* 
     QFile file(fileName);
 
     if(!file.open(QFile::ReadOnly | QFile::Text)) {
-        __BNN_DIE(QString("%1: Cannot open file %2 for reading!")
+        __NT_DIE(QString("%1: Cannot open file %2 for reading!")
                       .arg(QString::fromStdString(m_ProgramName))
                       .arg(QString(fileName)));
     }

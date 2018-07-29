@@ -15,7 +15,7 @@
 #pragma once
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-#define __Banana_Qt__
+#define __NT_QT__
 
 #define OPENGL_MAJOR 4
 #define OPENGL_MINOR 1
@@ -24,18 +24,18 @@ using OpenGLFunctions = QOpenGLFunctions_4_1_Core;
 
 #include <QDebug>
 #include <QMessageBox>
-#ifdef __BNN_ERROR
-#   undef __BNN_ERROR
+#ifdef __NT_ERROR
+#   undef __NT_ERROR
 #endif
-#define __BNN_ERROR(err)                                       \
+#define __NT_ERROR(err)                                        \
     {                                                          \
         QMessageBox::critical(nullptr, QString("Error"), err); \
     }
 
-#ifdef __BNN_INFO
-#   undef __BNN_INFO
+#ifdef __NT_INFO
+#   undef __NT_INFO
 #endif
-#define __BNN_INFO(info)                                          \
+#define __NT_INFO(info)                                           \
     {                                                             \
         QMessageBox::information(nullptr, QString("Info"), info); \
     }
@@ -48,7 +48,7 @@ using OpenGLFunctions = QOpenGLFunctions_4_1_Core;
 #   define __func__ __FUNCTION__
 #endif
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-#define __BNNQt_RunMainWindow(MainWindowClass, argc, argv, vsync)                                                             \
+#define __NTQT_RunMainWindow(MainWindowClass, argc, argv, vsync)                                                              \
     {                                                                                                                         \
         QSurfaceFormat format;                                                                                                \
         format.setDepthBufferSize(24);                                                                                        \
@@ -67,31 +67,31 @@ using OpenGLFunctions = QOpenGLFunctions_4_1_Core;
     }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-#define __BNNQt_PrintLine                                         \
+#define __NTQT_PRINT_LINE                                         \
     {                                                             \
         qDebug() << "Line:" << __LINE__ << ", file:" << __FILE__; \
     }
 
-#define __BNNQt_PrintExp(x)                                                            \
+#define __NTQT_PRINT_EXP(x)                                                            \
     {                                                                                  \
         qDebug() << "Printing at line: " << __LINE__ << ", file: " << __FILE__ << ":"; \
         qDebug() << "    " << #x << ": " << x;                                         \
     }
 
-#define __BNNQt_PrintLocation                                       \
+#define __NTQT_PRINT_LOCATION                                       \
     {                                                               \
         qDebug() << "Function: " << __func__;                       \
         qDebug() << "Line: " << __LINE__ << ", file: " << __FILE__; \
     }
 
-#define __BNNQt_Die(errMsg)                                                        \
+#define __NTQT_DIE(errMsg)                                                         \
     {                                                                              \
         qDebug() << "Error occured at line:" << __LINE__ << ", file:" << __FILE__; \
         qDebug() << "Error message:" << errMsg;                                    \
         exit(EXIT_FAILURE);                                                        \
     }
 
-#define __BNNQt_AssertMsg(condition, errMsg)                                                 \
+#define __NTQT_ASSERT_MSG(condition, errMsg)                                                 \
     {                                                                                        \
         if(!(condition))                                                                     \
         {                                                                                    \
@@ -101,7 +101,7 @@ using OpenGLFunctions = QOpenGLFunctions_4_1_Core;
         }                                                                                    \
     }
 
-#define __BNNQt_Check(condition, errStr)                     \
+#define __NTQT_CHECK(condition, errStr)                      \
     {                                                        \
         if(!(condition))                                     \
         {                                                    \

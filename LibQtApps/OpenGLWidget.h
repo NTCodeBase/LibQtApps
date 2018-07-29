@@ -84,7 +84,7 @@ protected:
     void checkGLExtensions(const QVector<QString>& extensions);
 
     ////////////////////////////////////////////////////////////////////////////////
-#ifdef __BANANA_DEBUG__
+#ifdef __NT_DEBUG__
     bool m_bPrintDebug = true;
 #else
     bool m_bPrintDebug = false;
