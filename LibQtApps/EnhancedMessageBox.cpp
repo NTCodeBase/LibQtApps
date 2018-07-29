@@ -12,53 +12,46 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <QFile>
-#include <QTextStream>
-#include <QDebug>
-
-#include <QtAppHelpers/QtAppShaderProgram.h>
-
+#include <LibQtApps/EnhancedMessageBox.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void QtAppShaderProgram::addVertexShaderFromResource(const char* fileName)
+void EnhancedMessageBox::setAutoClose(bool bAutoClose)
 {
-    std::string shaderSouce;
-    loadResourceFile(shaderSouce, fileName);
-
-    addVertexShaderFromSource(shaderSouce.c_str());
+    m_bAutoClose = bAutoClose;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void QtAppShaderProgram::addGeometryShaderFromResource(const char* fileName)
+void EnhancedMessageBox::setAutoCloseTimeout(int timeOut)
 {
-    std::string shaderSouce;
-    loadResourceFile(shaderSouce, fileName);
-
-    addGeometryShaderFromSource(shaderSouce.c_str());
+    m_TimeOut = timeOut;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void QtAppShaderProgram::addFragmentShaderFromResource(const char* fileName)
+void EnhancedMessageBox::setCountDownTime(int countDownTime)
 {
-    std::string shaderSouce;
-    loadResourceFile(shaderSouce, fileName);
-
-    addFragmentShaderFromSource(shaderSouce.c_str());
+    m_CountDownTime = countDownTime;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void QtAppShaderProgram::loadResourceFile(std::string& fileContent, const char* fileName)
+void EnhancedMessageBox::showEvent(QShowEvent* ev)
 {
-    QFile file(fileName);
+    QMessageBox::showEvent(ev);
 
-    if(!file.open(QFile::ReadOnly | QFile::Text)) {
-        __BNN_DIE(QString("%1: Cannot open file %2 for reading!")
-                      .arg(QString::fromStdString(m_ProgramName))
-                      .arg(QString(fileName)));
+    if(m_bAutoClose) {
+        m_ShowedTime = 0;
+
+        connect(&m_Timer, &QTimer::timeout, [&]
+                {
+                    m_ShowedTime += m_CountDownTime;
+                    if(m_ShowedTime >= m_TimeOut) {
+                        close();
+                    }
+
+                    setWindowTitle(QString("Closing in %1 sec.....").arg((m_TimeOut - m_ShowedTime) / 1000));
+                });
+
+        setWindowTitle(QString("Closing in %1 sec.....").arg((m_TimeOut - m_ShowedTime) / 1000));
+
+        m_Timer.start(m_CountDownTime);
     }
-
-    QTextStream in(&file);
-    fileContent = in.readAll().toStdString();
-    file.close();
 }
-

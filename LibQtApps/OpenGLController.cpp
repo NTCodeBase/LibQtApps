@@ -12,7 +12,7 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <QtAppHelpers/OpenGLController.h>
+#include <LibQtApps/OpenGLController.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLController::setupBasicGUI(Int width)
@@ -190,7 +190,8 @@ void OpenGLController::loadSkyBoxTextures()
     m_cbSkyTexture->addItem("None");
     ////////////////////////////////////////////////////////////////////////////////
     auto skyTexFolders = QtAppUtils::getTextureFolders("Sky");
-    foreach(const auto& tex, skyTexFolders) {
+    foreach(const auto& tex, skyTexFolders)
+    {
         m_cbSkyTexture->addItem(tex);
     }
     m_cbSkyTexture->setCurrentIndex(currentSkyTexID > 0 ? currentSkyTexID : 0);
@@ -238,7 +239,8 @@ void OpenGLController::loadFloorTextures()
     m_cbFloorTexture->addItem("None");
     ////////////////////////////////////////////////////////////////////////////////
     auto floorTexFolders = QtAppUtils::getTextureFiles("Floor");
-    foreach(const auto& tex, floorTexFolders) {
+    foreach(const auto& tex, floorTexFolders)
+    {
         m_cbFloorTexture->addItem(tex);
     }
     m_cbFloorTexture->setCurrentIndex(currentFloorTexID > 0 ? currentFloorTexID : 0);

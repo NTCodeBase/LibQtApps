@@ -12,35 +12,33 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <QtAppHelpers/FPSCounter.h>
+#pragma once
 
-
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-FPSCounter::FPSCounter(QObject* parent /*= nullptr*/, double updatePeriod /*= 2000*/) :
-    QObject(parent),
-    m_Counter(0),
-    m_UpdatePeriod(updatePeriod)
-{
-    m_StartTime = Clock::now();
-}
+#include <CommonSetup.h>
+#include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void FPSCounter::countFrame()
+class ClipPlaneEditor : public QWidget
 {
-    Clock::time_point countTime = Clock::now();
-    ++m_Counter;
+    Q_OBJECT
 
-    std::chrono::duration<double, std::milli> totalDuration =
-        std::chrono::duration_cast<std::chrono::duration<double, std::milli> >(countTime - m_StartTime);
+public:
+    ClipPlaneEditor(QWidget* parent = nullptr);
 
-    if(totalDuration.count() >= m_UpdatePeriod) {
-        double totalTimeInSec = totalDuration.count() / 1000.0;
-        double fps            = static_cast<double>(m_Counter) / totalTimeInSec;
+public:
+    QSize sizeHint() const { return QSize(600, 250); }
 
-        m_Counter   = 0;
-        m_StartTime = countTime;
+signals:
+    void clipPlaneChanged(const Vec4f&);
 
-        emit fpsChanged(fps);
-    }
-}
+public slots:
+    void setClipPlane(const Vec4f&);
+    void resetPlane();
 
+private:
+    void setupGUI();
+
+    Vec4f      m_ClipPlane = Vec4f(1, 0, 0, 0);
+    QSlider*   m_sldCoeffs[4];
+    QLineEdit* m_txtCoeffs[4];
+};

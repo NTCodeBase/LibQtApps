@@ -16,9 +16,9 @@
 
 #include <QtWidgets>
 #include <QtGui>
-#include <QtAppHelpers/ArthurStyle/arthurstyle.h>
-#include <QtAppHelpers/OpenGLWidget.h>
 
+#include <ArthurStyle/arthurstyle.h>
+#include <LibQtApps/OpenGLWidget.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class OpenGLMainWindow : public QMainWindow
@@ -49,4 +49,3 @@ protected:
     OpenGLWidget* m_GLWidget            = nullptr;
     bool          m_VSync               = true;
 };
-

@@ -12,8 +12,7 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <QtAppHelpers/OpenGLMainWindow.h>
-
+#include <LibQtApps/OpenGLMainWindow.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 OpenGLMainWindow::OpenGLMainWindow(QWidget* parent, bool bShowFPS /*= true*/, bool bShowCamPosition /*= true*/) : QMainWindow(parent)
@@ -75,7 +74,8 @@ void OpenGLMainWindow::setArthurStyle()
     setStyle(arthurStyle);
     ////////////////////////////////////////////////////////////////////////////////
     QList<QWidget*> widgets = findChildren<QWidget*>();
-    foreach(QWidget* w, widgets) {
+    foreach(QWidget * w, widgets)
+    {
         QString className = QString(w->metaObject()->className());
         if(className == "QScrollBar" || className == "QComboBox" || className == "QCheckBox") {
             continue;
@@ -135,4 +135,3 @@ void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget)
     connect(&m_GLWidget->m_FPSCounter, &FPSCounter::fpsChanged,                  this, &OpenGLMainWindow::updateStatusFrameRate);
     connect(m_GLWidget,                &OpenGLWidget::cameraPositionInfoChanged, this, &OpenGLMainWindow::updateStatusCameraInfo);
 }
-

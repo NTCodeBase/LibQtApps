@@ -14,16 +14,17 @@
 
 #pragma once
 
-#include <Setup.h>
-#include <QtAppHelpers/QtAppMacros.h>
-#include <QtAppHelpers/AvgTimer.h>
-#include <QtAppHelpers/FPSCounter.h>
-#include <QtAppHelpers/QtAppUtils.h>
+#include <CommonSetup.h>
 
-#include <OpenGLHelpers/Camera.h>
-#include <OpenGLHelpers/Lights.h>
-#include <OpenGLHelpers/OpenGLBuffer.h>
-#include <OpenGLHelpers/RenderObjects.h>
+#include <LibOpenGL/Camera.h>
+#include <LibOpenGL/Lights.h>
+#include <LibOpenGL/OpenGLBuffer.h>
+#include <LibOpenGL/RenderObjects.h>
+
+#include <LibQtApps/QtAppMacros.h>
+#include <LibQtApps/AvgTimer.h>
+#include <LibQtApps/FPSCounter.h>
+#include <LibQtApps/QtAppUtils.h>
 
 #include <QtGui>
 #include <QtWidgets>

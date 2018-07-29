@@ -14,22 +14,42 @@
 
 #pragma once
 
-#include <OpenGLHelpers/ShaderProgram.h>
+#include <LibOpenGL/Lights.h>
+#include <LibQtApps/ColorPicker.h>
 
+#include <QtWidgets>
+#include <vector>
+#include <memory>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class QtAppShaderProgram : public ShaderProgram
+#define MAX_POINT_LIGHT 4
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+class PointLightEditor : public QWidget
 {
+    Q_OBJECT
+
 public:
+    PointLightEditor(SharedPtr<PointLights> lights = nullptr, QWidget* parent = nullptr);
 
-    QtAppShaderProgram() {}
-    QtAppShaderProgram(const std::string& programName) : ShaderProgram(programName) {}
+public slots:
+    void changeLights(const Vector<PointLights::PointLightData>& lightData);
+    void setLightObject(const SharedPtr<PointLights>& lights);
+    void lightToGUI();
 
-    void addVertexShaderFromResource(const char* fileName);
-    void addGeometryShaderFromResource(const char* fileName);
-    void addFragmentShaderFromResource(const char* fileName);
+signals:
+    void lightsChanged();
 
-protected:
-    void loadResourceFile(std::string& fileContent, const char* fileName);
+private:
+    void connectComponents();
+    void applyLights();
+
+    QCheckBox*   m_CheckBoxes[MAX_POINT_LIGHT];
+    QLineEdit*   m_LightAmbients[MAX_POINT_LIGHT][3];
+    QLineEdit*   m_LightDiffuses[MAX_POINT_LIGHT][3];
+    QLineEdit*   m_LightSpeculars[MAX_POINT_LIGHT][3];
+    QLineEdit*   m_LightPositions[MAX_POINT_LIGHT][3];
+    ColorPicker* m_ColorSelectors[MAX_POINT_LIGHT][3];
+
+    SharedPtr<PointLights> m_Lights = nullptr;
 };
-

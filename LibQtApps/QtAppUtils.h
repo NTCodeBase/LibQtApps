@@ -14,8 +14,8 @@
 
 #pragma once
 
-#include <Setup.h>
-#include <Core/Utils/AppConfigReader.h>
+#include <CommonSetup.h>
+#include <Utils/AppConfigReader.h>
 #include <QtWidgets>
 #include <QString>
 #include <QDir>

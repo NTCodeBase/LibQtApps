@@ -12,8 +12,7 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <QtAppHelpers/EnhancedSlider.h>
-
+#include <LibQtApps/EnhancedSlider.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 EnhancedSlider::EnhancedSlider(int sliderSpan /*= 5*/, QWidget* parent /*= nullptr*/) :
@@ -38,7 +37,7 @@ EnhancedSlider::EnhancedSlider(int sliderSpan /*= 5*/, QWidget* parent /*= nullp
     connect(m_SpinBox, SIGNAL(valueChanged(int)), m_Slider, SLOT(setValue(int)));
 
     m_Layout = new QGridLayout;
-    m_Layout->addWidget(m_Slider,  0, 0,          1, sliderSpan);
+    m_Layout->addWidget( m_Slider, 0, 0,          1, sliderSpan);
     m_Layout->addWidget(m_SpinBox, 0, sliderSpan, 1, 1);
 }
 
@@ -132,4 +131,3 @@ void EnhancedSlider::setEnabled(bool enabled)
     m_Slider->setEnabled(enabled);
     m_SpinBox->setEnabled(enabled);
 }
-

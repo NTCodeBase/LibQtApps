@@ -14,10 +14,11 @@
 
 #pragma once
 
-#include <QtAppHelpers/OpenGLWidget.h>
-#include <QtAppHelpers/PointLightEditor.h>
-#include <QtAppHelpers/EnhancedComboBox.h>
-#include <QtAppHelpers/EnhancedSlider.h>
+#include <LibQtApps/OpenGLWidget.h>
+#include <LibQtApps/PointLightEditor.h>
+#include <LibQtApps/EnhancedComboBox.h>
+#include <LibQtApps/EnhancedSlider.h>
+
 #include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

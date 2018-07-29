@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include <OpenGLHelpers/Material.h>
-#include <QtAppHelpers/MaterialEditor.h>
-#include <QtAppHelpers/EnhancedComboBox.h>
+#include <LibOpenGL/Material.h>
+#include <LibQtApps/MaterialEditor.h>
+#include <LibQtApps/EnhancedComboBox.h>
 #include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

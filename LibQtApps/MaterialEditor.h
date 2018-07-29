@@ -14,11 +14,12 @@
 
 #pragma once
 
-#include <QtAppHelpers/ColorPicker.h>
-#include <OpenGLHelpers/Material.h>
-#include <QtAppHelpers/QtAppUtils.h>
-#include <QtWidgets>
+#include <LibOpenGL/Material.h>
 
+#include <LibQtApps/ColorPicker.h>
+#include <LibQtApps/QtAppUtils.h>
+
+#include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class MaterialEditor : public QDialog
@@ -28,7 +29,7 @@ class MaterialEditor : public QDialog
 public:
     MaterialEditor(const Material::MaterialData& material = Material::MT_Emerald, QWidget* parent = nullptr);
 
-    void        setMaterial(const Material::MaterialData& material);
+    void setMaterial(const Material::MaterialData& material);
     const auto& getMaterial() const { return m_CurrentMaterial; }
 
 signals:
@@ -36,7 +37,6 @@ signals:
 
 private:
     void setupGUI();
-
 
     ColorPicker*           m_AmbientColorPicker;
     ColorPicker*           m_DiffuseColorPicker;
@@ -54,9 +54,9 @@ class MaterialColorPicker : public QWidget
 public:
     MaterialColorPicker(QWidget* parent = nullptr);
 
-    void  setMaterial(const Material::MaterialData& material);
-    void  setWidgetColor(const Material::MaterialData& material);
-    void  paintEvent(QPaintEvent* e);
+    void setMaterial(const Material::MaterialData& material);
+    void setWidgetColor(const Material::MaterialData& material);
+    void paintEvent(QPaintEvent* e);
     QSize sizeHint() const { return QSize(30, 25); }
 
 signals:
@@ -70,4 +70,3 @@ protected:
 private:
     MaterialEditor* m_MaterialEditor;
 };
-

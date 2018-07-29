@@ -12,19 +12,19 @@
 #-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 #-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-include($$PWD/../../Common.pri)
+include($$PWD/../LibCommon/LibCommon.pri)
 include($$PWD/ArthurStyle/ArthurStyle.pri)
+INCLUDEPATH += $$PWD/../LibOpenGL
+INCLUDEPATH += $$PWD/
 
 QT += core gui widgets
 
-TARGET = QtAppHelpers
+TARGET = LibQtApps
 TEMPLATE = lib
 CONFIG += staticlib
 
-HEADERS = $$files(*.h, false)
-SOURCES += $$files(*.cpp, false)
-
-DISTFILES += QtAppHelpers.pri
+HEADERS = $$files(*.h, true)
+SOURCES += $$files(*.cpp, true)
 
 #-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 CONFIG(debug, debug|release) {

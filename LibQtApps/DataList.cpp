@@ -12,8 +12,7 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <QtAppHelpers/DataList.h>
-
+#include <LibQtApps/DataList.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 DataList::DataList(QWidget* parent, bool bAddEmptyItem /*= true*/, bool bAddOrderText /*= true*/, QString indexSeparator /*= QString("::")*/) :
@@ -147,9 +146,9 @@ void DataList::setupGUI()
 
     QPushButton* btnReload = new QPushButton("Reload");
     connect(btnReload, &QPushButton::clicked, [&]
-        {
-            loadListFromFile(m_ListFile);
-        });
+            {
+                loadListFromFile(m_ListFile);
+            });
 
     QHBoxLayout* statusLayout = new QHBoxLayout;
     statusLayout->addWidget(m_lblStatus, 4);
@@ -173,4 +172,3 @@ void DataList::setupGUI()
                 }
             });
 }
-

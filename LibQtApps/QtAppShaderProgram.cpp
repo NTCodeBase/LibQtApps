@@ -12,51 +12,51 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <QtAppHelpers/BusyBar.h>
+#include <QFile>
+#include <QTextStream>
+#include <QDebug>
 
+#include <LibQtApps/QtAppShaderProgram.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-BusyBar::BusyBar(QWidget* parent /*= 0*/, Style style /*= Cycle*/, int interval /*= 0*/) : QProgressBar(parent), m_Style(style), m_Value(0)
+void QtAppShaderProgram::addVertexShaderFromResource(const char* fileName)
 {
-    setTextVisible(false);
-    setMinimum(0);
-    setMaximum(100);
+    std::string shaderSouce;
+    loadResourceFile(shaderSouce, fileName);
 
-    ////////////////////////////////////////////////////////////////////////////////
-    m_Timer.setInterval(interval);
-    connect(&m_Timer, &QTimer::timeout, [&]
-            {
-                if(m_Style == Cycle) {
-                    ++m_Value;
-                    if(m_Value > 100) {
-                        m_Value = 0;
-                    }
-                } else {
-                    --m_Value;
-                    if(m_Value < 0) {
-                        m_Value = 100;
-                    }
-                }
-
-                setValue(m_Value);
-            });
+    addVertexShaderFromSource(shaderSouce.c_str());
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void BusyBar::setBusy(bool busy)
+void QtAppShaderProgram::addGeometryShaderFromResource(const char* fileName)
 {
-    if(busy) {
-        m_Timer.start();
-    } else {
-        m_Timer.stop();
+    std::string shaderSouce;
+    loadResourceFile(shaderSouce, fileName);
+
+    addGeometryShaderFromSource(shaderSouce.c_str());
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void QtAppShaderProgram::addFragmentShaderFromResource(const char* fileName)
+{
+    std::string shaderSouce;
+    loadResourceFile(shaderSouce, fileName);
+
+    addFragmentShaderFromSource(shaderSouce.c_str());
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void QtAppShaderProgram::loadResourceFile(std::string& fileContent, const char* fileName)
+{
+    QFile file(fileName);
+
+    if(!file.open(QFile::ReadOnly | QFile::Text)) {
+        __BNN_DIE(QString("%1: Cannot open file %2 for reading!")
+                      .arg(QString::fromStdString(m_ProgramName))
+                      .arg(QString(fileName)));
     }
-}
 
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void BusyBar::reset()
-{
-    setBusy(false);
-    m_Value = 0;
-    setValue(m_Value);
+    QTextStream in(&file);
+    fileContent = in.readAll().toStdString();
+    file.close();
 }
-

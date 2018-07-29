@@ -12,48 +12,49 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <QtAppHelpers/EnhancedMessageBox.h>
-
-
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedMessageBox::setAutoClose(bool bAutoClose)
-{
-    m_bAutoClose = bAutoClose;
-}
+#include <LibQtApps/BusyBar.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedMessageBox::setAutoCloseTimeout(int timeOut)
+BusyBar::BusyBar(QWidget* parent /*= 0*/, Style style /*= Cycle*/, int interval /*= 0*/) : QProgressBar(parent), m_Style(style), m_Value(0)
 {
-    m_TimeOut = timeOut;
-}
+    setTextVisible(false);
+    setMinimum(0);
+    setMaximum(100);
 
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedMessageBox::setCountDownTime(int countDownTime)
-{
-    m_CountDownTime = countDownTime;
-}
-
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedMessageBox::showEvent(QShowEvent* ev)
-{
-    QMessageBox::showEvent(ev);
-
-    if(m_bAutoClose) {
-        m_ShowedTime = 0;
-
-        connect(&m_Timer, &QTimer::timeout, [&]
+    ////////////////////////////////////////////////////////////////////////////////
+    m_Timer.setInterval(interval);
+    connect(&m_Timer, &QTimer::timeout, [&]
             {
-                m_ShowedTime += m_CountDownTime;
-                if(m_ShowedTime >= m_TimeOut) {
-                    close();
+                if(m_Style == Cycle) {
+                    ++m_Value;
+                    if(m_Value > 100) {
+                        m_Value = 0;
+                    }
+                } else {
+                    --m_Value;
+                    if(m_Value < 0) {
+                        m_Value = 100;
+                    }
                 }
 
-                setWindowTitle(QString("Closing in %1 sec.....").arg((m_TimeOut - m_ShowedTime) / 1000));
+                setValue(m_Value);
             });
+}
 
-        setWindowTitle(QString("Closing in %1 sec.....").arg((m_TimeOut - m_ShowedTime) / 1000));
-
-        m_Timer.start(m_CountDownTime);
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void BusyBar::setBusy(bool busy)
+{
+    if(busy) {
+        m_Timer.start();
+    } else {
+        m_Timer.stop();
     }
 }
 
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void BusyBar::reset()
+{
+    setBusy(false);
+    m_Value = 0;
+    setValue(m_Value);
+}

@@ -14,12 +14,11 @@
 
 #pragma once
 
-#include <Setup.h>
-#include <QtAppHelpers/QtAppUtils.h>
+#include <CommonSetup.h>
+#include <LibQtApps/QtAppUtils.h>
 
 #include <QtGui>
 #include <QtWidgets>
-
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class ColorPicker : public QWidget
@@ -39,7 +38,7 @@ public:
     void  setDefaultSize(QSize size);
     QSize sizeHint() const;
 
-    QLayout*   getLayout(const QString& label = QString(""), int labelStretch = 5);
+    QLayout*   getLayout(const QString& label   = QString(""), int labelStretch = 5);
     QGroupBox* getGroupBox(const QString& title = QString(""), const QString& label = QString(""));
 
 signals:
@@ -57,4 +56,3 @@ private:
     QGroupBox*   m_GroupBox;
     QGridLayout* m_Layout;
 };
-
