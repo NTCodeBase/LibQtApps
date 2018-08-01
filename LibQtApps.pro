@@ -23,8 +23,8 @@ TARGET = LibQtApps
 TEMPLATE = lib
 CONFIG += staticlib
 
-HEADERS = $$files(*.h, true)
-SOURCES += $$files(*.cpp, true)
+HEADERS = $$files($$PWD/LibQtApps/*.h, true)
+SOURCES += $$files($$PWD/LibQtApps/*.cpp, true)
 
 #-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 CONFIG(debug, debug|release) {
