@@ -46,8 +46,7 @@ bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev)
     switch(ev->key()) {
         case Qt::Key_Escape:
             close();
-            __NT_EARLY_TERMINATION
-        //exit(EXIT_SUCCESS);
+            __NT_RAISE_ABORT_SIGNAL
 
         default:
             return false;
