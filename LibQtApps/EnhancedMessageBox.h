@@ -16,7 +16,6 @@
 
 #include <QtWidgets>
 
-
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class EnhancedMessageBox : public QMessageBox
 {
@@ -37,4 +36,3 @@ private:
     int    m_CountDownTime = 1000;
     QTimer m_Timer;
 };
-

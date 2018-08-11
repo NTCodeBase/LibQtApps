@@ -16,7 +16,6 @@
 
 #include <QtWidgets>
 
-
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class EnhancedComboBox : public QWidget
 {
@@ -64,4 +63,3 @@ private:
     QToolButton* m_btnPrev;
     QToolButton* m_btnNext;
 };
-

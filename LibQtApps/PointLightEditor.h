@@ -33,7 +33,7 @@ public:
     PointLightEditor(SharedPtr<PointLights> lights = nullptr, QWidget* parent = nullptr);
 
 public slots:
-    void changeLights(const Vector<PointLights::PointLightData>& lightData);
+    void changeLights(const StdVT<PointLights::PointLightData>& lightData);
     void setLightObject(const SharedPtr<PointLights>& lights);
     void lightToGUI();
 

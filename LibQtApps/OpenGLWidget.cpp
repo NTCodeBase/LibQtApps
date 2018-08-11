@@ -346,7 +346,7 @@ void OpenGLWidget::initRDataLight()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::setLights(const Vector<PointLights::PointLightData>& lightData)
+void OpenGLWidget::setLights(const StdVT<PointLights::PointLightData>& lightData)
 {
     m_Lights->setNumLights(static_cast<int>(lightData.size()));
     for(int i = 0, iend = static_cast<int>(lightData.size()); i < iend; ++i) {

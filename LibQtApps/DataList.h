@@ -17,7 +17,6 @@
 #include <QtWidgets>
 #include <QMap>
 
-
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class DataList : public QWidget
 {
@@ -53,4 +52,3 @@ private:
     QStringList  m_DataList;
     QLabel*      m_lblStatus;
 };
-

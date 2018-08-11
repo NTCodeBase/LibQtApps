@@ -97,7 +97,7 @@ void PointLightEditor::setLightObject(const SharedPtr<PointLights>& lights)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void PointLightEditor::changeLights(const Vector<PointLights::PointLightData>& lightData)
+void PointLightEditor::changeLights(const StdVT<PointLights::PointLightData>& lightData)
 {
     m_Lights->setNumLights(static_cast<Int>(lightData.size()));
     for(Int i = 0, iend = static_cast<Int>(lightData.size()); i < iend; ++i) {

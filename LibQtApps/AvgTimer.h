@@ -18,7 +18,6 @@
 #include <cassert>
 #include <QObject>
 
-
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class AvgTimer : public QObject
 {
@@ -80,4 +79,3 @@ private:
     Clock::time_point m_TickTime;
     Clock::time_point m_TockTime;
 };
-

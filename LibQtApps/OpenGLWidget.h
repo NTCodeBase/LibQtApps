@@ -142,7 +142,7 @@ protected:
 signals:
     void lightsObjChanged(const SharedPtr<PointLights>& lights);
 public slots:
-    void setLights(const Vector<PointLights::PointLightData>& lightData);
+    void setLights(const StdVT<PointLights::PointLightData>& lightData);
     void updateLights();
 protected:
     void initRDataLight();

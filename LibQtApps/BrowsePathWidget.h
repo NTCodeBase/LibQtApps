@@ -16,7 +16,6 @@
 
 #include <QtWidgets>
 
-
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class BrowsePathWidget : public QWidget
 {
@@ -24,11 +23,11 @@ class BrowsePathWidget : public QWidget
 
 public:
     BrowsePathWidget(QString caption, bool folderOnly = true, QWidget* parent = 0);
-    BrowsePathWidget(QIcon icon, bool folderOnly = true, QWidget* parent = 0);
+    BrowsePathWidget(QIcon icon, bool folderOnly      = true, QWidget* parent = 0);
 
-    void       setupGui(QWidget* button);
+    void setupGui(QWidget* button);
     void       setEnabled(bool enabled) { m_Button->setEnabled(enabled); }
-    QLayout*   getLayout() { return m_Layout; }
+    QLayout* getLayout() { return m_Layout; }
     QGroupBox* getGroupBox(QString title = QString(""));
     auto       getCurrentPath() const { return m_txtPath->text(); }
 
@@ -50,4 +49,3 @@ private:
     QString          m_CurrentPath;
     bool             m_bFolderOnly;
 };
-

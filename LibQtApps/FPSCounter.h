@@ -17,7 +17,6 @@
 #include <chrono>
 #include <QObject>
 
-
 using Clock = std::chrono::high_resolution_clock;
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -37,4 +36,3 @@ private:
     double            m_UpdatePeriod;
     Clock::time_point m_StartTime;
 };
-
