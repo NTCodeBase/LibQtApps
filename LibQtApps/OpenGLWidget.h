@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <CommonSetup.h>
+#include <LibCommon/CommonSetup.h>
 
 #include <LibOpenGL/Camera.h>
 #include <LibOpenGL/Lights.h>
@@ -74,9 +74,9 @@ protected:
 
     // => protected members of class OpenGLWidget
 protected:
-    virtual void initOpenGL()                     = 0;
+    virtual void initOpenGL() = 0;
     virtual void resizeOpenGLWindow(int w, int h) = 0;
-    virtual void renderOpenGL()                   = 0;
+    virtual void renderOpenGL() = 0;
 
     void uploadCameraData();
     void checkGLErrors();
