@@ -187,12 +187,17 @@ void OpenGLWidget::uploadCameraData()
 {
     m_Camera->updateCameraMatrices();
     if(m_Camera->isCameraChanged()) {
-        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getViewMatrix()),              0,                                   sizeof(Mat4x4f));
-        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getProjectionMatrix()),        sizeof(Mat4x4f),                     sizeof(Mat4x4f));
-        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getInverseViewMatrix()),       2 * sizeof(Mat4x4f),                 sizeof(Mat4x4f));
-        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getInverseProjectionMatrix()), 3 * sizeof(Mat4x4f),                 sizeof(Mat4x4f));
-        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getCameraPosition()),          5 * sizeof(Mat4x4f),                 sizeof(Vec3f));
-        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getCameraFocus()),             5 * sizeof(Mat4x4f) + sizeof(Vec4f), sizeof(Vec3f));
+        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getViewMatrix()),       0,               sizeof(Mat4x4f));
+        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getProjectionMatrix()), sizeof(Mat4x4f), sizeof(Mat4x4f));
+        if(m_Camera->useInverseViewMatrix()) {
+            m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getInverseViewMatrix()), 2 * sizeof(Mat4x4f), sizeof(Mat4x4f));
+        }
+        if(m_Camera->useInverseProjectionMatrix()) {
+            m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getInverseProjectionMatrix()), 3 * sizeof(Mat4x4f), sizeof(Mat4x4f));
+        }
+        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getCameraPosition()), 5 * sizeof(Mat4x4f),                 sizeof(Vec3f));
+        m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getCameraFocus()),    5 * sizeof(Mat4x4f) + sizeof(Vec4f), sizeof(Vec3f));
+        ////////////////////////////////////////////////////////////////////////////////
         emit cameraPositionInfoChanged(m_Camera->getCameraPosition(), m_Camera->getCameraFocus());
     }
 }
