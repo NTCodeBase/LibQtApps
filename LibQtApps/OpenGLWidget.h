@@ -214,4 +214,25 @@ protected:
     UniquePtr<WireFrameBoxRender> m_DomainBoxRender = nullptr;
     bool                          m_bRenderBox      = true;
     ////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // gizmo =>
+public slots:
+    void enableRenderGizmo(bool bRender) { m_RDataGizmo.bRenderGizmo = bRender; }
+    void setGizmoWidgetSize(int widgetSize) { m_RDataGizmo.widgetSize = widgetSize; }
+    void setGizmoWidthRatio(float widthRatio) { m_RDataGizmo.widthRatio = widthRatio; }
+protected:
+    struct RDataGizmo
+    {
+        SharedPtr<ShaderProgram> shader = nullptr;
+        GLuint                   VAO;
+        GLuint                   ub_CamData;
+        int                      widgetSize   = 100;
+        float                    widthRatio   = 0.1f;
+        bool                     bRenderGizmo = true;
+        bool                     bInitialized = false;
+    } m_RDataGizmo;
+    void initRDataGizmo();
+    void renderGizmo();
+    ////////////////////////////////////////////////////////////////////////////////
 };

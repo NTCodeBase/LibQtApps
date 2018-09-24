@@ -127,8 +127,9 @@ void OpenGLWidget::initializeGL()
     initRDataSkyBox();
     initRDataCheckerboardBackground();
     initRDataGridBackground();
-    initRDataBox();
     initRDataFloor();
+    initRDataBox();
+    initRDataGizmo();
     ////////////////////////////////////////////////////////////////////////////////
     // call init function from derived class
     initOpenGL();
@@ -177,8 +178,10 @@ void OpenGLWidget::paintGL()
     renderLight();
     renderFloor();
     renderBox();
+    renderGizmo();
     ////////////////////////////////////////////////////////////////////////////////
     // call render function from derived class
+    glCall(glViewport(0, 0, width(), height()));
     renderOpenGL();
 }
 
@@ -389,4 +392,30 @@ void OpenGLWidget::initRDataBox()
 {
     Q_ASSERT(m_UBufferCamData != nullptr);
     m_DomainBoxRender = std::make_unique<WireFrameBoxRender>(m_Camera, m_UBufferCamData);
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::initRDataGizmo()
+{
+    m_RDataGizmo.shader     = ShaderProgram::getGizmoShader();
+    m_RDataGizmo.ub_CamData = m_RDataGizmo.shader->getUniformBlockIndex("CameraData");
+    glCall(glGenVertexArrays(1, &m_RDataGizmo.VAO));
+    m_RDataGizmo.bInitialized = true;
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::renderGizmo()
+{
+    Q_ASSERT(m_RDataGizmo.bInitialized);
+    glCall(glViewport(0, 0, m_RDataGizmo.widgetSize, m_RDataGizmo.widgetSize));
+    m_RDataGizmo.shader->bind();
+    ////////////////////////////////////////////////////////////////////////////////
+    m_UBufferCamData->bindBufferBase();
+    m_RDataGizmo.shader->bindUniformBlock(m_RDataGizmo.ub_CamData, m_UBufferCamData->getBindingPoint());
+    ////////////////////////////////////////////////////////////////////////////////
+    glCall(glBindVertexArray(m_RDataGizmo.VAO));
+    glCall(glDrawArrays(GL_TRIANGLES, 0, 108));
+    ////////////////////////////////////////////////////////////////////////////////
+    glCall(glBindVertexArray(0));
+    m_RDataGizmo.shader->release();
 }
