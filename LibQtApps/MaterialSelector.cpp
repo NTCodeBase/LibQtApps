@@ -29,8 +29,7 @@ MaterialSelector::MaterialSelector(const Material::MaterialData& material /*= Ma
     QPalette palette = this->palette();
     palette.setColor(QPalette::Window, floatToQColor(m_CurrentMaterial.diffuse));
     m_MaterialColorPicker = new MaterialColorPicker;
-    connect(m_MaterialColorPicker, &MaterialColorPicker::materialChanged, this, [&](const Material::MaterialData& material)
-            {
+    connect(m_MaterialColorPicker, &MaterialColorPicker::materialChanged, this, [&](const Material::MaterialData& material) {
                 m_CustomMaterial = material;
                 QColor color(floatToQColor(material.diffuse));
                 m_ComboBox->getComboBox()->setItemData(m_ComboBox->count() - 1, color, Qt::DecorationRole);
@@ -139,6 +138,7 @@ void MaterialSelector::setCustomMaterial(const Material::MaterialData& material)
     m_MaterialColorPicker->setMaterial(material);
 
     if(m_ComboBox->currentIndex() == m_ComboBox->count() - 1) {
+        m_CurrentMaterial = material;
         m_MaterialColorPicker->setWidgetColor(m_CurrentMaterial);
     }
 
