@@ -32,8 +32,7 @@
 #include <QDir>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class OpenGLWidget : public QOpenGLWidget, public OpenGLFunctions
-{
+class OpenGLWidget : public QOpenGLWidget, public OpenGLFunctions {
     Q_OBJECT
     friend class OpenGLMainWindow;
 
@@ -97,6 +96,7 @@ protected:
 
     FPSCounter m_FPSCounter;
 
+    bool                    m_bLockCamera    = false;
     UniquePtr<QTimer>       m_UpdateTimer    = nullptr;
     SharedPtr<OpenGLBuffer> m_UBufferCamData = nullptr;
     SharedPtr<Camera>       m_Camera         = std::make_shared<Camera>();
@@ -116,6 +116,7 @@ public slots:
     void setCamera(const Vec3f& cameraPosition, const Vec3f& cameraFocus) { m_Camera->setCamera(cameraPosition, cameraFocus, Vec3f(0, 1, 0)); }
     void setCamera(const std::pair<Vec3f, Vec3f>& cameraInfo) { m_Camera->setCamera(cameraInfo.first, cameraInfo.second, Vec3f(0, 1, 0)); }
     void resetCameraPosition() { m_Camera->reset(); }
+    void lockCamera(bool bLocked) { m_bLockCamera = bLocked; }
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////

@@ -15,8 +15,7 @@
 #include <LibQtApps/OpenGLWidget.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
-{
+OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent) {
     m_UpdateTimer = std::make_unique<QTimer>(this);
     connect(m_UpdateTimer.get(), SIGNAL(timeout()), this, SLOT(update()));
     m_UpdateTimer->start(0);
@@ -28,8 +27,7 @@ OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::mousePressEvent(QMouseEvent* ev)
-{
+void OpenGLWidget::mousePressEvent(QMouseEvent* ev) {
     if(ev->button() == Qt::LeftButton) {
         m_MouseButtonPressed = MouseButton::LeftButton;
     } else if(ev->button() == Qt::RightButton) {
@@ -38,12 +36,16 @@ void OpenGLWidget::mousePressEvent(QMouseEvent* ev)
         m_MouseButtonPressed = MouseButton::NoButton;
     }
     ////////////////////////////////////////////////////////////////////////////////
-    m_Camera->set_last_mouse_pos(ev->x(), ev->y());
+    if(!m_bLockCamera) {
+        m_Camera->set_last_mouse_pos(ev->x(), ev->y());
+    }
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::mouseMoveEvent(QMouseEvent* ev)
-{
+void OpenGLWidget::mouseMoveEvent(QMouseEvent* ev) {
+    if(m_bLockCamera) {
+        return;
+    }
     if(m_MouseButtonPressed == MouseButton::LeftButton) {
         m_Camera->rotate_by_mouse(ev->x(), ev->y());
     } else if(m_MouseButtonPressed == MouseButton::RightButton) {
@@ -56,8 +58,10 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent* ev)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::wheelEvent(QWheelEvent* ev)
-{
+void OpenGLWidget::wheelEvent(QWheelEvent* ev) {
+    if(m_bLockCamera) {
+        return;
+    }
     if(ev->angleDelta().isNull()) {
         return;
     }
@@ -66,39 +70,52 @@ void OpenGLWidget::wheelEvent(QWheelEvent* ev)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::keyPressEvent(QKeyEvent* ev)
-{
+void OpenGLWidget::keyPressEvent(QKeyEvent* ev) {
     switch(ev->key()) {
         case Qt::Key_Shift:
             m_SpecialKeyPressed = SpecialKey::ShiftKey;
             break;
 
         case Qt::Key_Plus:
-            m_Camera->zoom(-0.01f);
+            if(!m_bLockCamera) {
+                m_Camera->zoom(-0.01f);
+            }
             break;
 
         case Qt::Key_Minus:
-            m_Camera->zoom(0.01f);
+            if(!m_bLockCamera) {
+                m_Camera->zoom(0.01f);
+            }
             break;
 
         case Qt::Key_Up:
-            m_Camera->translate(Vec2f(0.0f, 0.1f));
+            if(!m_bLockCamera) {
+                m_Camera->translate(Vec2f(0.0f, 0.1f));
+            }
             break;
 
         case Qt::Key_Down:
-            m_Camera->translate(Vec2f(0.0f, -0.1f));
+            if(!m_bLockCamera) {
+                m_Camera->translate(Vec2f(0.0f, -0.1f));
+            }
             break;
 
         case Qt::Key_Left:
-            m_Camera->translate(Vec2f(-0.1f, 0.0f));
+            if(!m_bLockCamera) {
+                m_Camera->translate(Vec2f(-0.1f, 0.0f));
+            }
             break;
 
         case Qt::Key_Right:
-            m_Camera->translate(Vec2f(0.1f, 0.0f));
+            if(!m_bLockCamera) {
+                m_Camera->translate(Vec2f(0.1f, 0.0f));
+            }
             break;
 
         case Qt::Key_C:
-            m_Camera->reset();
+            if(!m_bLockCamera) {
+                m_Camera->reset();
+            }
             break;
 
         default:
@@ -107,8 +124,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* ev)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::initializeGL()
-{
+void OpenGLWidget::initializeGL() {
     initializeOpenGLFunctions();
     checkGLVersion();
     checkGLErrors();
@@ -136,8 +152,7 @@ void OpenGLWidget::initializeGL()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::resizeGL(int w, int h)
-{
+void OpenGLWidget::resizeGL(int w, int h) {
     glCall(glViewport(0, 0, w, h));
     m_Camera->resizeWindow((float)w, (float)h);
     m_CaptureImage.reset(new QImage(w, h, QImage::Format_RGB888));
@@ -154,8 +169,7 @@ void OpenGLWidget::resizeGL(int w, int h)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::paintGL()
-{
+void OpenGLWidget::paintGL() {
     m_FPSCounter.countFrame();
     ////////////////////////////////////////////////////////////////////////////////
     glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
@@ -186,8 +200,7 @@ void OpenGLWidget::paintGL()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::uploadCameraData()
-{
+void OpenGLWidget::uploadCameraData() {
     m_Camera->updateCameraMatrices();
     if(m_Camera->isCameraChanged()) {
         m_UBufferCamData->uploadData(glm::value_ptr(m_Camera->getViewMatrix()),       0,               sizeof(Mat4x4f));
@@ -206,8 +219,7 @@ void OpenGLWidget::uploadCameraData()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::checkGLErrors()
-{
+void OpenGLWidget::checkGLErrors() {
     glCall(GLenum glStatus = glGetError());
     if(glStatus == GL_NO_ERROR) {
         return;
@@ -249,8 +261,7 @@ void OpenGLWidget::checkGLErrors()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::checkGLVersion()
-{
+void OpenGLWidget::checkGLVersion() {
     glCall(QString deviceStr = QString((const char*)glGetString(GL_RENDERER)));
     glCall(QString verStr    = QString((const char*)glGetString(GL_VERSION)));
     emit emitDebugString(QString("GPU: ") + deviceStr);
@@ -267,8 +278,7 @@ void OpenGLWidget::checkGLVersion()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::checkGLExtensions(const QVector<QString>& extensions)
-{
+void OpenGLWidget::checkGLExtensions(const QVector<QString>& extensions) {
     glCall(QString extStr = QString((const char*)glGetString(GL_EXTENSIONS)));
     emit emitDebugString(extStr);
 
@@ -287,8 +297,7 @@ void OpenGLWidget::checkGLExtensions(const QVector<QString>& extensions)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::setCapturePath(const QString& path)
-{
+void OpenGLWidget::setCapturePath(const QString& path) {
     m_CapturePath = path;
     if(!QDir(path).exists()) {
         QDir().mkdir(path);
@@ -296,8 +305,7 @@ void OpenGLWidget::setCapturePath(const QString& path)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::setClearColor(const Vec3f& color)
-{
+void OpenGLWidget::setClearColor(const Vec3f& color) {
     m_ClearColor = color;
     if(isValid()) {
         makeCurrent();
@@ -307,8 +315,7 @@ void OpenGLWidget::setClearColor(const Vec3f& color)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-bool OpenGLWidget::exportScreenToImage(int frame)
-{
+bool OpenGLWidget::exportScreenToImage(int frame) {
     if(m_CapturePath.isEmpty()) {
         return false;
     }
@@ -322,8 +329,7 @@ bool OpenGLWidget::exportScreenToImage(int frame)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::enableClipPlane(bool bEnable)
-{
+void OpenGLWidget::enableClipPlane(bool bEnable) {
     if(isValid()) {
         makeCurrent();
         if(bEnable) {
@@ -336,8 +342,7 @@ void OpenGLWidget::enableClipPlane(bool bEnable)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::initRDataLight()
-{
+void OpenGLWidget::initRDataLight() {
     m_Lights = std::make_shared<PointLights>();
     m_Lights->setNumLights(2);
     m_Lights->setLightPosition(Vec4f(-10.0f, 20.0f, 10.0f, 1.0f),  0);
@@ -352,8 +357,7 @@ void OpenGLWidget::initRDataLight()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::setLights(const StdVT<PointLights::PointLightData>& lightData)
-{
+void OpenGLWidget::setLights(const StdVT<PointLights::PointLightData>& lightData) {
     m_Lights->setNumLights(static_cast<int>(lightData.size()));
     for(int i = 0, iend = static_cast<int>(lightData.size()); i < iend; ++i) {
         m_Lights->setLight(lightData[i], i);
@@ -362,8 +366,7 @@ void OpenGLWidget::setLights(const StdVT<PointLights::PointLightData>& lightData
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::updateLights()
-{
+void OpenGLWidget::updateLights() {
     if(isValid()) {
         makeCurrent();
         m_Lights->uploadDataToGPU();
@@ -372,15 +375,13 @@ void OpenGLWidget::updateLights()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::initRDataSkyBox()
-{
+void OpenGLWidget::initRDataSkyBox() {
     Q_ASSERT(m_UBufferCamData != nullptr);
     m_SkyBoxRender = std::make_unique<SkyBoxRender>(m_Camera, QtAppUtils::getTexturePath() + "/Sky/", m_UBufferCamData);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::initRDataFloor()
-{
+void OpenGLWidget::initRDataFloor() {
     Q_ASSERT(m_UBufferCamData != nullptr && m_Lights != nullptr);
     m_FloorRender = std::make_unique<PlaneRender>(m_Camera, m_Lights, QtAppUtils::getTexturePath() + "/Floor/", m_UBufferCamData);
     m_FloorRender->setAllowNonTextureRender(false);
@@ -388,15 +389,13 @@ void OpenGLWidget::initRDataFloor()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::initRDataBox()
-{
+void OpenGLWidget::initRDataBox() {
     Q_ASSERT(m_UBufferCamData != nullptr);
     m_DomainBoxRender = std::make_unique<WireFrameBoxRender>(m_Camera, m_UBufferCamData);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::initRDataGizmo()
-{
+void OpenGLWidget::initRDataGizmo() {
     m_RDataGizmo.shader     = ShaderProgram::getGizmoShader();
     m_RDataGizmo.ub_CamData = m_RDataGizmo.shader->getUniformBlockIndex("CameraData");
     glCall(glGenVertexArrays(1, &m_RDataGizmo.VAO));
@@ -404,8 +403,7 @@ void OpenGLWidget::initRDataGizmo()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::renderGizmo()
-{
+void OpenGLWidget::renderGizmo() {
     Q_ASSERT(m_RDataGizmo.bInitialized);
     glCall(glViewport(0, 0, m_RDataGizmo.widgetSize, m_RDataGizmo.widgetSize));
     m_RDataGizmo.shader->bind();
