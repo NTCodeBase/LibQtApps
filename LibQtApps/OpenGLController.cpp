@@ -15,8 +15,7 @@
 #include <LibQtApps/OpenGLController.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLController::setupBasicGUI(Int width)
-{
+void OpenGLController::setupBasicGUI(Int width) {
     setupBackgroundControllers();
     setupFloorControllers();
     setupBoxControllers();
@@ -36,8 +35,7 @@ void OpenGLController::setupBasicGUI(Int width)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLController::connectBasicWidgets()
-{
+void OpenGLController::connectBasicWidgets() {
     ////////////////////////////////////////////////////////////////////////////////
     // lights
     connect(m_LightEditor, &PointLightEditor::lightsChanged, m_GLWidget,    &OpenGLWidget::updateLights);
@@ -46,7 +44,10 @@ void OpenGLController::connectBasicWidgets()
 
     ////////////////////////////////////////////////////////////////////////////////
     // background mode
-    connect(m_smBackgroundMode, SIGNAL(mapped(int)), m_GLWidget, SLOT(setBackgroundMode(int)));
+    connect(m_smBackgroundMode, SIGNAL(mapped(int)),                                               m_GLWidget, SLOT(setBackgroundMode(int)));
+    connect(m_smBackgroundMode, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), [&](int backgroundMode) {
+                m_chkRenderBox->setChecked(backgroundMode == OpenGLWidget::BackgroundMode::SkyBox || backgroundMode == OpenGLWidget::BackgroundMode::Color);
+            });
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -90,8 +91,7 @@ void OpenGLController::connectBasicWidgets()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLController::setupBackgroundControllers()
-{
+void OpenGLController::setupBackgroundControllers() {
     QRadioButton* rdbBackgroundSkyBox       = new QRadioButton("SkyBox");
     QRadioButton* rdbBackgroundColor        = new QRadioButton("Color");
     QRadioButton* rdbBackgroundCheckerboard = new QRadioButton("Checkerboard");
@@ -183,8 +183,7 @@ void OpenGLController::setupBackgroundControllers()
     loadSkyBoxTextures();
 }
 
-void OpenGLController::loadSkyBoxTextures()
-{
+void OpenGLController::loadSkyBoxTextures() {
     Int currentSkyTexID = m_cbSkyTexture->currentIndex();
     m_cbSkyTexture->clear();
     m_cbSkyTexture->addItem("None");
@@ -198,8 +197,7 @@ void OpenGLController::loadSkyBoxTextures()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLController::setupFloorControllers()
-{
+void OpenGLController::setupFloorControllers() {
     m_sldFloorSize->setRange(1, 100);
     m_sldFloorSize->getSlider()->setValue(10);
     auto layoutFloorSize = new QHBoxLayout;
@@ -232,8 +230,7 @@ void OpenGLController::setupFloorControllers()
     loadFloorTextures();
 }
 
-void OpenGLController::loadFloorTextures()
-{
+void OpenGLController::loadFloorTextures() {
     Int currentFloorTexID = m_cbFloorTexture->currentIndex();
     m_cbFloorTexture->clear();
     m_cbFloorTexture->addItem("None");
@@ -247,8 +244,7 @@ void OpenGLController::loadFloorTextures()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLController::setupBoxControllers()
-{
+void OpenGLController::setupBoxControllers() {
     m_chkRenderBox->setChecked(true);
     m_pkrBoxColor->setMinimumHeight(20);
     m_pkrBoxColor->setColor(WireFrameBoxRender::getDefaultBoxColor());
