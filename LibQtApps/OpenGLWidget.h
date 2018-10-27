@@ -54,6 +54,7 @@ public:
     ////////////////////////////////////////////////////////////////////////////////
     // => mouse and key handling
 protected:
+    enum class MouseButton { NoButton, LeftButton, MiddleButton, RightButton };
     virtual void mousePressEvent(QMouseEvent* ev) override;
     virtual void mouseReleaseEvent(QMouseEvent*) override { m_MouseButtonPressed = MouseButton::NoButton; }
     virtual void mouseMoveEvent(QMouseEvent* ev) override;
@@ -61,6 +62,7 @@ protected:
     virtual void showEvent(QShowEvent*) override { setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding); }
 
 public:
+    enum class SpecialKey { NoKey, ShiftKey, CtrlKey, AltKey };
     virtual void keyPressEvent(QKeyEvent* ev) override;
     virtual void keyReleaseEvent(QKeyEvent*) override { m_SpecialKeyPressed = SpecialKey::NoKey; }
     ////////////////////////////////////////////////////////////////////////////////
