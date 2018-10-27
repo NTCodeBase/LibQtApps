@@ -29,6 +29,7 @@ void OpenGLController::setupBasicGUI(Int width) {
     m_MainTab->addTab(m_LightEditor,       "Lights");
     ////////////////////////////////////////////////////////////////////////////////
     m_MainLayout->addWidget(m_MainTab);
+    setupButtons();
     setLayout(m_MainLayout);
     ////////////////////////////////////////////////////////////////////////////////
     setFixedWidth(width);
@@ -87,6 +88,14 @@ void OpenGLController::connectBasicWidgets() {
     // box
     connect(m_chkRenderBox, &QCheckBox::toggled,        m_GLWidget, &OpenGLWidget::enableRenderBox);
     connect(m_pkrBoxColor,  &ColorPicker::colorChanged, [&](float r, float g, float b) { m_GLWidget->setBoxColor(Vec3f(r, g, b)); });
+    ////////////////////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // buttons
+    connect(m_btnResetCamera,   &QPushButton::clicked, m_GLWidget, &OpenGLWidget::resetCameraPosition);
+    connect(m_btnLockCamera,    &QPushButton::clicked, m_GLWidget, &OpenGLWidget::lockCamera);
+    connect(m_btnClipViewPlane, &QPushButton::clicked, m_GLWidget, &OpenGLWidget::enableClipPlane);
+    connect(m_btnEditClipPlane, &QPushButton::clicked, m_GLWidget, &OpenGLWidget::showClipPlaneEditor);
     ////////////////////////////////////////////////////////////////////////////////
 }
 
@@ -255,4 +264,25 @@ void OpenGLController::setupBoxControllers() {
     layoutBoxCtrl->addWidget(m_pkrBoxColor);
     m_grBoxCtrl->setLayout(layoutBoxCtrl);
     m_LayoutMainControllers->addWidget(m_grBoxCtrl);
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLController::setupButtons() {
+    ////////////////////////////////////////////////////////////////////////////////
+    m_btnResetCamera   = new QPushButton("Reset Camera");
+    m_btnLockCamera    = new QPushButton("Lock Camera");
+    m_btnClipViewPlane = new QPushButton("Clip View");
+    m_btnEditClipPlane = new QPushButton("Edit Clip Plane");
+    m_btnLockCamera->setCheckable(true);
+    m_btnClipViewPlane->setCheckable(true);
+    ////////////////////////////////////////////////////////////////////////////////
+    m_LayoutButtons = new QGridLayout;
+    m_nButtonRows   = 0;
+    m_LayoutButtons->addWidget(m_btnResetCamera,   m_nButtonRows,   0, 1, 1);
+    m_LayoutButtons->addWidget(m_btnLockCamera,    m_nButtonRows++, 1, 1, 1);
+    m_LayoutButtons->addWidget(m_btnClipViewPlane, m_nButtonRows,   0, 1, 1);
+    m_LayoutButtons->addWidget(m_btnEditClipPlane, m_nButtonRows++, 1, 1, 1);
+    ////////////////////////////////////////////////////////////////////////////////
+    m_MainLayout->addStretch();
+    m_MainLayout->addLayout(m_LayoutButtons);
 }
