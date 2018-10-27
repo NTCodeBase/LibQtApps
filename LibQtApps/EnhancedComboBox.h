@@ -17,8 +17,7 @@
 #include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class EnhancedComboBox : public QWidget
-{
+class EnhancedComboBox : public QWidget {
     Q_OBJECT
 
 public:
@@ -30,7 +29,7 @@ public:
     QComboBox* getComboBox() const { return m_ComboBox; }
     QLayout* getLayout() const { return m_Layout; }
     QLayout*   getLayoutWithLabel(const QString& label, int comboStretch = 5);
-    QGroupBox* getGroupBox(const QString& title                          = QString(""));
+    QGroupBox* getGroupBox(const QString& title = QString(""));
 
     int count() const { return m_ComboBox->count(); }
     void setCurrentIndex(int index) { m_ComboBox->setCurrentIndex(index); }
@@ -56,10 +55,10 @@ signals:
     void currentTextChanged(const QString&);
 
 private:
-    QComboBox*   m_ComboBox;
-    bool         m_enabledCycling;
-    QGroupBox*   m_GroupBox;
-    QGridLayout* m_Layout;
-    QToolButton* m_btnPrev;
-    QToolButton* m_btnNext;
+    bool         m_enabledCycling = true;
+    QComboBox*   m_ComboBox       = nullptr;
+    QGroupBox*   m_GroupBox       = nullptr;
+    QGridLayout* m_Layout         = nullptr;
+    QToolButton* m_btnPrev        = nullptr;
+    QToolButton* m_btnNext        = nullptr;
 };

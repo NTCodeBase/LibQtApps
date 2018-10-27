@@ -12,6 +12,7 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+#include <LibQtApps/FPSCounter.h>
 #include <LibQtApps/OpenGLWidget.h>
 #include <LibQtApps/OpenGLMainWindow.h>
 #include <ArthurStyle/arthurstyle.h>
@@ -132,6 +133,6 @@ void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget) {
     }
     m_GLWidget = glWidget;
     setCentralWidget(m_GLWidget);
-    connect(&m_GLWidget->m_FPSCounter, &FPSCounter::fpsChanged,                  this, &OpenGLMainWindow::updateStatusFrameRate);
-    connect(m_GLWidget,                &OpenGLWidget::cameraPositionInfoChanged, this, &OpenGLMainWindow::updateStatusCameraInfo);
+    connect(m_GLWidget->m_FPSCounter.get(), &FPSCounter::fpsChanged,                  this, &OpenGLMainWindow::updateStatusFrameRate);
+    connect(m_GLWidget,                     &OpenGLWidget::cameraPositionInfoChanged, this, &OpenGLMainWindow::updateStatusCameraInfo);
 }

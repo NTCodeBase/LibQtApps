@@ -15,27 +15,25 @@
 #pragma once
 
 #include <LibOpenGL/Material.h>
-#include <LibQtApps/MaterialEditor.h>
-#include <LibQtApps/EnhancedComboBox.h>
+#include <LibQtApps/Forward.h>
 #include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class MaterialSelector : public QWidget
-{
+class MaterialSelector : public QWidget {
     Q_OBJECT
 
 public:
     MaterialSelector(const Material::MaterialData& material = Material::MT_Emerald, bool defaultCustomMaterial = false,
-                     int comboBoxSpan                       = 4, QWidget* parent = nullptr);
+                     int comboBoxSpan = 4, QWidget* parent = nullptr);
 
     void setDefaultCustomMaterial(bool defaultCustomMaterial);
     auto getComboBox() const { return m_ComboBox; }
     auto getLayout() const { return m_Layout; }
     auto getGroupBox(QString title = QString(""));
-    auto getNumMaterials() const { return m_ComboBox->count(); }
+    int  getNumMaterials() const;
 
 public slots:
-    void setEnabled(bool enabled) { m_ComboBox->setEnabled(enabled); }
+    void setEnabled(bool enabled);
     void setMaterial(int materialID);
     void setMaterial(const Material::MaterialData& material);
     void setCustomMaterial(const Material::MaterialData& material);
@@ -49,10 +47,10 @@ private:
     QColor floatToQColor(const Vec3f& color) { return floatToQColor(color.x, color.y, color.z); }
     Vec3f  QColorToFloat(const QColor& color) { return Vec3f(color.redF(), color.greenF(), color.blueF()); }
 
-    bool                                m_bDebug;
-    EnhancedComboBox*                   m_ComboBox;
-    QGroupBox*                          m_GroupBox;
-    QGridLayout*                        m_Layout;
+    bool                                m_bDebug   = false;
+    EnhancedComboBox*                   m_ComboBox = nullptr;
+    QGroupBox*                          m_GroupBox = nullptr;
+    QGridLayout*                        m_Layout   = nullptr;
     MaterialColorPicker*                m_MaterialColorPicker;
     Material::MaterialData              m_CurrentMaterial;
     Material::MaterialData              m_CustomMaterial;

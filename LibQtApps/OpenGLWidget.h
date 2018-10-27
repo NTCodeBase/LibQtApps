@@ -15,14 +15,11 @@
 #pragma once
 
 #include <LibCommon/CommonSetup.h>
-
-#include <LibOpenGL/Camera.h>
+#include <LibOpenGL/Forward.h>
 #include <LibOpenGL/Lights.h>
-#include <LibOpenGL/OpenGLBuffer.h>
-#include <LibOpenGL/RenderObjects.h>
 
+#include <LibQtApps/Forward.h>
 #include <LibQtApps/QtAppMacros.h>
-#include <LibQtApps/FPSCounter.h>
 #include <LibQtApps/QtAppUtils.h>
 
 #include <QtGui>
@@ -30,8 +27,6 @@
 #include <QSurfaceFormat>
 #include <QDir>
 
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class ClipPlaneEditor;
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class OpenGLWidget : public QOpenGLWidget, public OpenGLFunctions {
     Q_OBJECT
@@ -97,12 +92,12 @@ protected:
     MouseButton m_MouseButtonPressed = MouseButton::NoButton;
     QString     m_CapturePath        = QtAppUtils::getDefaultCapturePath();
 
-    FPSCounter m_FPSCounter;
+    SharedPtr<FPSCounter> m_FPSCounter = nullptr;
 
     bool                    m_bLockCamera    = false;
     UniquePtr<QTimer>       m_UpdateTimer    = nullptr;
     SharedPtr<OpenGLBuffer> m_UBufferCamData = nullptr;
-    SharedPtr<Camera>       m_Camera         = std::make_shared<Camera>();
+    SharedPtr<Camera>       m_Camera         = nullptr;
 
 signals:
     void emitDebugString(const QString& str);
@@ -115,10 +110,10 @@ public slots:
     void setDefaultSize(QSize size) { m_DefaultSize = size; }
     void setClearColor(const Vec3f& color);
     void resetClearColor() { glClearColor(m_ClearColor[0], m_ClearColor[1], m_ClearColor[2], 1.0f); }
-    void setViewFrustum(float fov, float nearZ, float farZ) { m_Camera->setFrustum(fov, nearZ, farZ); }
-    void setCamera(const Vec3f& cameraPosition, const Vec3f& cameraFocus) { m_Camera->setCamera(cameraPosition, cameraFocus, Vec3f(0, 1, 0)); }
-    void setCamera(const std::pair<Vec3f, Vec3f>& cameraInfo) { m_Camera->setCamera(cameraInfo.first, cameraInfo.second, Vec3f(0, 1, 0)); }
-    void resetCameraPosition() { m_Camera->reset(); }
+    void setViewFrustum(float fov, float nearZ, float farZ);
+    void setCamera(const Vec3f& cameraPosition, const Vec3f& cameraFocus);
+    void setCamera(const std::pair<Vec3f, Vec3f>& cameraInfo);
+    void resetCameraPosition();
     void lockCamera(bool bLocked) { m_bLockCamera = bLocked; }
     ////////////////////////////////////////////////////////////////////////////////
 
@@ -157,7 +152,7 @@ public slots:
     void updateLights();
 protected:
     void initRDataLight();
-    void renderLight() { Q_ASSERT(m_LightRender != nullptr); m_LightRender->render(); }
+    void renderLight();
     SharedPtr<PointLights>      m_Lights      = nullptr;
     UniquePtr<PointLightRender> m_LightRender = nullptr;
     ////////////////////////////////////////////////////////////////////////////////
@@ -174,22 +169,21 @@ public:
     };
 public slots:
     void setBackgroundMode(int backgroundMode) { m_BackgroundMode = static_cast<BackgroundMode>(backgroundMode); }
-    void setSkyBoxTextureIndex(int texIndex) { Q_ASSERT(m_SkyBoxRender != nullptr); m_SkyBoxRender->setRenderTextureIndex(texIndex); }
-    void setCheckerboarrdColor1(const Vec3f& color) { Q_ASSERT(m_CheckerboardRender != nullptr); m_CheckerboardRender->setColor1(color); }
-    void setCheckerboarrdColor2(const Vec3f& color) { Q_ASSERT(m_CheckerboardRender != nullptr); m_CheckerboardRender->setColor2(color); }
-    void setCheckerboarrdScales(const Vec2i& scales) { Q_ASSERT(m_CheckerboardRender != nullptr); m_CheckerboardRender->setScales(scales); }
-    void setGridBackgroundColor(const Vec3f& color) { Q_ASSERT(m_GridRender != nullptr); m_GridRender->setBackgroundColor(color); }
-    void setGridLineColor(const Vec3f& color) { Q_ASSERT(m_GridRender != nullptr); m_GridRender->setLineColor(color); }
-    void setGridScales(const Vec2i& scales) { Q_ASSERT(m_GridRender != nullptr); m_GridRender->setScales(scales); }
-    void reloadSkyboxTextures() { m_SkyBoxRender->clearTextures(); m_SkyBoxRender->loadTextures(QtAppUtils::getTexturePath() + "/Sky/"); }
+    void setSkyBoxTextureIndex(int texIndex);
+    void setCheckerboarrdColor1(const Vec3f& color);
+    void setCheckerboarrdColor2(const Vec3f& color);
+    void setCheckerboarrdScales(const Vec2i& scales);
+    void setGridBackgroundColor(const Vec3f& color);
+    void setGridLineColor(const Vec3f& color);
+    void setGridScales(const Vec2i& scales);
+    void reloadSkyboxTextures();
 protected:
     void initRDataSkyBox();
-    void initRDataCheckerboardBackground() { m_CheckerboardRender = std::make_unique<CheckerboardBackgroundRender>(); }
-    void initRDataGridBackground() { m_GridRender = std::make_unique<GridBackgroundRender>(); }
-    void renderSkyBox() { Q_ASSERT(m_SkyBoxRender != nullptr); m_SkyBoxRender->render(); }
-    void renderCheckerboardBackground() { Q_ASSERT(m_CheckerboardRender != nullptr); m_CheckerboardRender->render(); }
-    void renderGridBackground() { Q_ASSERT(m_GridRender != nullptr); m_GridRender->render(); }
-
+    void initRDataCheckerboardBackground();
+    void initRDataGridBackground();
+    void renderSkyBox();
+    void renderCheckerboardBackground();
+    void renderGridBackground();
     UniquePtr<SkyBoxRender>                 m_SkyBoxRender       = nullptr;
     UniquePtr<CheckerboardBackgroundRender> m_CheckerboardRender = nullptr;
     UniquePtr<GridBackgroundRender>         m_GridRender         = nullptr;
@@ -199,16 +193,16 @@ protected:
     ////////////////////////////////////////////////////////////////////////////////
     // floor =>
 public slots:
-    void setFloorTextureIndex(int texIndex) { Q_ASSERT(m_FloorRender != nullptr); m_FloorRender->setRenderTextureIndex(texIndex); }
-    void setFloorExposure(int percentage) { m_FloorRender->setExposure(static_cast<float>(percentage) / 100.0f); }
-    void setFloorSize(int size) { m_FloorRender->scale(Vec3f(static_cast<float>(size))); }
-    void setFloorTexScales(int scale) { m_FloorRender->scaleTexCoord(scale, scale); }
-    void setFloorHeightX100(int height) { m_FloorRender->translate(Vec3f(0, static_cast<float>(height) / 100.0f, 0)); }
-    void setFloorHeight(float height) { m_FloorRender->translate(Vec3f(0, height, 0)); }
-    void reloadFloorTextures() { m_FloorRender->clearTextures(); m_FloorRender->loadTextures(QtAppUtils::getTexturePath() + "/Floor/"); }
+    void setFloorTextureIndex(int texIndex);
+    void setFloorExposure(int percentage);
+    void setFloorSize(int size);
+    void setFloorTexScales(int scale);
+    void setFloorHeightX100(int height);
+    void setFloorHeight(float height);
+    void reloadFloorTextures();
 protected:
     void initRDataFloor();
-    void renderFloor() { Q_ASSERT(m_FloorRender != nullptr); m_FloorRender->render(); }
+    void renderFloor();
     UniquePtr<PlaneRender> m_FloorRender = nullptr;
     ////////////////////////////////////////////////////////////////////////////////
 
@@ -216,11 +210,11 @@ protected:
     // box =>
 public slots:
     void enableRenderBox(bool bRender) { m_bRenderBox = bRender; }
-    void setBoxColor(const Vec3f& color) { Q_ASSERT(m_DomainBoxRender != nullptr); m_DomainBoxRender->setColor(color); }
-    void setBox(const Vec3f& boxMin, const Vec3f& boxMax) { if(isValid()) { makeCurrent(); m_DomainBoxRender->setBox(boxMin, boxMax); doneCurrent(); } }
+    void setBoxColor(const Vec3f& color);
+    void setBox(const Vec3f& boxMin, const Vec3f& boxMax);
 protected:
     void initRDataBox();
-    void renderBox() { Q_ASSERT(m_DomainBoxRender != nullptr); if(m_bRenderBox) { m_DomainBoxRender->render(); } }
+    void renderBox();
     UniquePtr<WireFrameBoxRender> m_DomainBoxRender = nullptr;
     bool                          m_bRenderBox      = true;
     ////////////////////////////////////////////////////////////////////////////////

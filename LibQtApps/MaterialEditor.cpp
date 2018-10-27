@@ -12,6 +12,8 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+#include <LibQtApps/ColorPicker.h>
+#include <LibQtApps/QtAppUtils.h>
 #include <LibQtApps/MaterialEditor.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -19,18 +21,15 @@
 // MaterialEditor class
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-MaterialEditor::MaterialEditor(const Material::MaterialData& material /*= Material::MT_Emerald*/, QWidget* parent /*= nullptr*/) : QDialog(parent)
-{
+MaterialEditor::MaterialEditor(const Material::MaterialData& material /*= Material::MT_Emerald*/, QWidget* parent /*= nullptr*/) : QDialog(parent) {
     setModal(true);
     setupGUI();
-
     setMaterial(material);
     setFixedSize(250, 180);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialEditor::setMaterial(const Material::MaterialData& material)
-{
+void MaterialEditor::setMaterial(const Material::MaterialData& material) {
     m_CurrentMaterial = material;
     m_AmbientColorPicker->setColor(QtAppUtils::floatToQColor(material.ambient));
     m_DiffuseColorPicker->setColor(QtAppUtils::floatToQColor(material.diffuse));
@@ -39,8 +38,7 @@ void MaterialEditor::setMaterial(const Material::MaterialData& material)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialEditor::setupGUI()
-{
+void MaterialEditor::setupGUI() {
     QVBoxLayout* mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
     QGridLayout* materialLayout = new QGridLayout;
@@ -71,8 +69,7 @@ void MaterialEditor::setupGUI()
 
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, [&]()
-            {
+    connect(buttonBox, &QDialogButtonBox::accepted, this, [&]() {
                 m_CurrentMaterial.ambient   = Vec4f(QtAppUtils::QColorToFloat(m_AmbientColorPicker->getQColor()), 1);
                 m_CurrentMaterial.diffuse   = Vec4f(QtAppUtils::QColorToFloat(m_DiffuseColorPicker->getQColor()), 1);
                 m_CurrentMaterial.specular  = Vec4f(QtAppUtils::QColorToFloat(m_SpecularColorPicker->getQColor()), 1);
@@ -87,39 +84,32 @@ void MaterialEditor::setupGUI()
 // MaterialColorPicker class
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-MaterialColorPicker::MaterialColorPicker(QWidget* parent /*= nullptr*/) : QWidget(parent), m_MaterialEditor(new MaterialEditor)
-
-{
+MaterialColorPicker::MaterialColorPicker(QWidget* parent /*= nullptr*/) : QWidget(parent), m_MaterialEditor(new MaterialEditor) {
     setMouseTracking(true);
     setAutoFillBackground(true);
     setMaterial(m_MaterialEditor->getMaterial());
-    connect(m_MaterialEditor, &MaterialEditor::materialChanged, this, [&](const Material::MaterialData& material)
-            {
+    connect(m_MaterialEditor, &MaterialEditor::materialChanged, this, [&](const Material::MaterialData& material) {
                 setMaterial(material);
                 emit materialChanged(material);
             });
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialColorPicker::setMaterial(const Material::MaterialData& material)
-{
+void MaterialColorPicker::setMaterial(const Material::MaterialData& material) {
     m_MaterialEditor->setMaterial(material);
     setWidgetColor(material);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialColorPicker::setWidgetColor(const Material::MaterialData& material)
-{
+void MaterialColorPicker::setWidgetColor(const Material::MaterialData& material) {
     QPalette palette = this->palette();
     palette.setColor(QPalette::Window, QtAppUtils::floatToQColor(material.diffuse));
     setPalette(palette);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialColorPicker::paintEvent(QPaintEvent* e)
-{
+void MaterialColorPicker::paintEvent(QPaintEvent* e) {
     QPainter painter(this);
     painter.drawRoundedRect(1, 1, width() - 1, height() - 1, 1, 1);
-
     QWidget::paintEvent(e);
 }

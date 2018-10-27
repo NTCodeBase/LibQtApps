@@ -12,11 +12,15 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+#include <LibOpenGL/Camera.h>
+#include <LibOpenGL/OpenGLBuffer.h>
+#include <LibOpenGL/RenderObjects.h>
 #include <LibQtApps/ClipPlaneEditor.h>
+#include <LibQtApps/FPSCounter.h>
 #include <LibQtApps/OpenGLWidget.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent) {
+OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent), m_FPSCounter(std::make_shared<FPSCounter>()), m_Camera(std::make_shared<Camera>()) {
     m_ClipPlaneEditor = new ClipPlaneEditor;
     connect(m_ClipPlaneEditor,   &ClipPlaneEditor::clipPlaneChanged, this, &OpenGLWidget::setClipPlane);
     ////////////////////////////////////////////////////////////////////////////////
@@ -174,7 +178,7 @@ void OpenGLWidget::resizeGL(int w, int h) {
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLWidget::paintGL() {
-    m_FPSCounter.countFrame();
+    m_FPSCounter->countFrame();
     ////////////////////////////////////////////////////////////////////////////////
     glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
     uploadCameraData();
@@ -319,6 +323,23 @@ void OpenGLWidget::setClearColor(const Vec3f& color) {
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::setViewFrustum(float fov, float nearZ, float farZ) {
+    m_Camera->setFrustum(fov, nearZ, farZ);
+}
+
+void OpenGLWidget::setCamera(const Vec3f& cameraPosition, const Vec3f& cameraFocus) {
+    m_Camera->setCamera(cameraPosition, cameraFocus, Vec3f(0, 1, 0));
+}
+
+void OpenGLWidget::setCamera(const std::pair<Vec3f, Vec3f>& cameraInfo) {
+    m_Camera->setCamera(cameraInfo.first, cameraInfo.second, Vec3f(0, 1, 0));
+}
+
+void OpenGLWidget::resetCameraPosition() {
+    m_Camera->reset();
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 bool OpenGLWidget::exportScreenToImage(int frame) {
     if(m_CapturePath.isEmpty()) {
         return false;
@@ -368,6 +389,12 @@ void OpenGLWidget::initRDataLight() {
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::renderLight() {
+    Q_ASSERT(m_LightRender != nullptr);
+    m_LightRender->render();
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLWidget::setLights(const StdVT<PointLights::PointLightData>& lightData) {
     m_Lights->setNumLights(static_cast<int>(lightData.size()));
     for(int i = 0, iend = static_cast<int>(lightData.size()); i < iend; ++i) {
@@ -391,6 +418,71 @@ void OpenGLWidget::initRDataSkyBox() {
     m_SkyBoxRender = std::make_unique<SkyBoxRender>(m_Camera, QtAppUtils::getTexturePath() + "/Sky/", m_UBufferCamData);
 }
 
+void OpenGLWidget::initRDataCheckerboardBackground() {
+    m_CheckerboardRender = std::make_unique<CheckerboardBackgroundRender>();
+}
+
+void OpenGLWidget::initRDataGridBackground() {
+    m_GridRender = std::make_unique<GridBackgroundRender>();
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::setSkyBoxTextureIndex(int texIndex) {
+    Q_ASSERT(m_SkyBoxRender != nullptr);
+    m_SkyBoxRender->setRenderTextureIndex(texIndex);
+}
+
+void OpenGLWidget::setCheckerboarrdColor1(const Vec3f& color) {
+    Q_ASSERT(m_CheckerboardRender != nullptr);
+    m_CheckerboardRender->setColor1(color);
+}
+
+void OpenGLWidget::setCheckerboarrdColor2(const Vec3f& color) {
+    Q_ASSERT(m_CheckerboardRender != nullptr);
+    m_CheckerboardRender->setColor2(color);
+}
+
+void OpenGLWidget::setCheckerboarrdScales(const Vec2i& scales) {
+    Q_ASSERT(m_CheckerboardRender != nullptr);
+    m_CheckerboardRender->setScales(scales);
+}
+
+void OpenGLWidget::setGridBackgroundColor(const Vec3f& color) {
+    Q_ASSERT(m_GridRender != nullptr);
+    m_GridRender->setBackgroundColor(color);
+}
+
+void OpenGLWidget::setGridLineColor(const Vec3f& color) {
+    Q_ASSERT(m_GridRender != nullptr);
+    m_GridRender->setLineColor(color);
+}
+
+void OpenGLWidget::setGridScales(const Vec2i& scales) {
+    Q_ASSERT(m_GridRender != nullptr);
+    m_GridRender->setScales(scales);
+}
+
+void OpenGLWidget::reloadSkyboxTextures() {
+    m_SkyBoxRender->clearTextures();
+    m_SkyBoxRender->loadTextures(QtAppUtils::getTexturePath() + "/Sky/");
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::renderSkyBox() {
+    Q_ASSERT(m_SkyBoxRender != nullptr);
+    m_SkyBoxRender->render();
+}
+
+void OpenGLWidget::renderCheckerboardBackground() {
+    Q_ASSERT(m_CheckerboardRender != nullptr);
+    m_CheckerboardRender->render();
+}
+
+void OpenGLWidget::renderGridBackground() {
+    Q_ASSERT(m_GridRender != nullptr);
+    m_GridRender->render();
+}
+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLWidget::initRDataFloor() {
     Q_ASSERT(m_UBufferCamData != nullptr && m_Lights != nullptr);
@@ -400,9 +492,74 @@ void OpenGLWidget::initRDataFloor() {
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::setFloorTextureIndex(int texIndex) {
+    Q_ASSERT(m_FloorRender != nullptr);
+    m_FloorRender->setRenderTextureIndex(texIndex);
+}
+
+void OpenGLWidget::setFloorExposure(int percentage) {
+    Q_ASSERT(m_FloorRender != nullptr);
+    m_FloorRender->setExposure(static_cast<float>(percentage) / 100.0f);
+}
+
+void OpenGLWidget::setFloorSize(int size) {
+    Q_ASSERT(m_FloorRender != nullptr);
+    m_FloorRender->scale(Vec3f(static_cast<float>(size)));
+}
+
+void OpenGLWidget::setFloorTexScales(int scale) {
+    Q_ASSERT(m_FloorRender != nullptr);
+    m_FloorRender->scaleTexCoord(scale, scale);
+}
+
+void OpenGLWidget::setFloorHeightX100(int height) {
+    Q_ASSERT(m_FloorRender != nullptr);
+    m_FloorRender->translate(Vec3f(0, static_cast<float>(height) / 100.0f, 0));
+}
+
+void OpenGLWidget::setFloorHeight(float height) {
+    Q_ASSERT(m_FloorRender != nullptr);
+    m_FloorRender->translate(Vec3f(0, height, 0));
+}
+
+void OpenGLWidget::reloadFloorTextures() {
+    Q_ASSERT(m_FloorRender != nullptr);
+    m_FloorRender->clearTextures();
+    m_FloorRender->loadTextures(QtAppUtils::getTexturePath() + "/Floor/");
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::renderFloor() {
+    Q_ASSERT(m_FloorRender != nullptr);
+    m_FloorRender->render();
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLWidget::initRDataBox() {
     Q_ASSERT(m_UBufferCamData != nullptr);
     m_DomainBoxRender = std::make_unique<WireFrameBoxRender>(m_Camera, m_UBufferCamData);
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::setBoxColor(const Vec3f& color) {
+    Q_ASSERT(m_DomainBoxRender != nullptr);
+    m_DomainBoxRender->setColor(color);
+}
+
+void OpenGLWidget::setBox(const Vec3f& boxMin, const Vec3f& boxMax) {
+    Q_ASSERT(m_DomainBoxRender != nullptr);
+    if(isValid()) {
+        makeCurrent();
+        m_DomainBoxRender->setBox(boxMin, boxMax); doneCurrent();
+    }
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::renderBox() {
+    Q_ASSERT(m_DomainBoxRender != nullptr);
+    if(m_bRenderBox) {
+        m_DomainBoxRender->render();
+    }
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

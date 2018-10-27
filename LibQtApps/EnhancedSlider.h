@@ -17,8 +17,7 @@
 #include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class EnhancedSlider : public QWidget
-{
+class EnhancedSlider : public QWidget {
     Q_OBJECT
 
 public:
@@ -28,7 +27,7 @@ public:
     QSpinBox*  getSpinBox() const;
     QLayout*   getLayout() const;
     QLayout*   getLayoutWithLabel(const QString& label, int sldStretch = 5);
-    QGroupBox* getGroupBox(const QString& title                        = QString(""));
+    QGroupBox* getGroupBox(const QString& title = QString(""));
 
     void setTracking(bool tracking);
     void setRange(int minVal, int maxVal);
@@ -41,8 +40,8 @@ public slots:
     void nextItem();
 
 private:
-    QSlider*     m_Slider;
-    QSpinBox*    m_SpinBox;
-    QGroupBox*   m_GroupBox;
-    QGridLayout* m_Layout;
+    QSlider*     m_Slider   = nullptr;
+    QSpinBox*    m_SpinBox  = nullptr;
+    QGroupBox*   m_GroupBox = nullptr;
+    QGridLayout* m_Layout   = nullptr;
 };

@@ -18,8 +18,7 @@
 BrowsePathWidget::BrowsePathWidget(QString caption, bool folderOnly /*= true*/, QWidget* parent /*= 0*/) :
     QWidget(parent),
     m_GroupBox(nullptr),
-    m_bFolderOnly(folderOnly)
-{
+    m_bFolderOnly(folderOnly) {
     QPushButton* btnBrowse = new QPushButton(caption);
     setupGui(btnBrowse);
 }
@@ -28,16 +27,14 @@ BrowsePathWidget::BrowsePathWidget(QString caption, bool folderOnly /*= true*/, 
 BrowsePathWidget::BrowsePathWidget(QIcon icon, bool folderOnly, QWidget* parent) :
     QWidget(parent),
     m_GroupBox(nullptr),
-    m_bFolderOnly(folderOnly)
-{
+    m_bFolderOnly(folderOnly) {
     QToolButton* btnBrowse = new QToolButton;
     btnBrowse->setIcon(icon);
     setupGui(btnBrowse);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void BrowsePathWidget::setupGui(QWidget* button)
-{
+void BrowsePathWidget::setupGui(QWidget* button) {
     m_txtPath = new QLineEdit;
     m_txtPath->setEnabled(false);
 
@@ -55,8 +52,7 @@ void BrowsePathWidget::setupGui(QWidget* button)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QGroupBox* BrowsePathWidget::getGroupBox(QString title)
-{
+QGroupBox* BrowsePathWidget::getGroupBox(QString title) {
     if(m_GroupBox == nullptr) {
         m_GroupBox = new QGroupBox(title);
         m_GroupBox->setLayout(m_Layout);
@@ -66,10 +62,10 @@ QGroupBox* BrowsePathWidget::getGroupBox(QString title)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void BrowsePathWidget::browse()
-{
+void BrowsePathWidget::browse() {
     QString selectedPath = m_bFolderOnly ?
-                           QFileDialog::getExistingDirectory(nullptr, QString("Select path"), m_CurrentPath, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks) :
+                           QFileDialog::getExistingDirectory(nullptr, QString("Select path"), m_CurrentPath,
+                                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks) :
                            QFileDialog::getOpenFileName(nullptr, QString("Select file"), m_CurrentPath);
     if(selectedPath.trimmed() != "") {
         m_CurrentPath = selectedPath;

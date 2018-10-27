@@ -17,12 +17,10 @@
 #include <chrono>
 #include <QObject>
 
-using Clock = std::chrono::high_resolution_clock;
-
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class FPSCounter : public QObject
-{
+class FPSCounter : public QObject {
     Q_OBJECT
+    using Clock = std::chrono::high_resolution_clock;
 
 public:
     FPSCounter(QObject* parent = nullptr, double updatePeriod = 2000);
@@ -32,7 +30,7 @@ signals:
     void fpsChanged(double fps);
 
 private:
-    int               m_Counter;
+    int               m_Counter = 0;
     double            m_UpdatePeriod;
     Clock::time_point m_StartTime;
 };

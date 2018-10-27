@@ -15,26 +15,16 @@
 #include <LibQtApps/EnhancedSlider.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-EnhancedSlider::EnhancedSlider(int sliderSpan /*= 5*/, QWidget* parent /*= nullptr*/) :
-    QWidget(parent),
-    m_SpinBox(nullptr),
-    m_Slider(nullptr),
-    m_GroupBox(nullptr),
-    m_Layout(nullptr)
-{
+EnhancedSlider::EnhancedSlider(int sliderSpan /*= 5*/, QWidget* parent /*= nullptr*/) : QWidget(parent) {
     m_Slider = new QSlider(Qt::Horizontal);
     m_Slider->setRange(0, 100);
     m_Slider->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_SpinBox = new QSpinBox;
     m_SpinBox->setRange(0, 100);
 
-    connect(m_Slider, &QSlider::valueChanged, m_SpinBox, &QSpinBox::setValue);
-    connect(m_Slider, &QSlider::sliderMoved,  this,      [&](int value)
-            {
-                QToolTip::showText(QCursor::pos(), QString("%1").arg(value));
-            });
-
-    connect(m_SpinBox, SIGNAL(valueChanged(int)), m_Slider, SLOT(setValue(int)));
+    connect( m_Slider,      &QSlider::valueChanged, m_SpinBox, &QSpinBox::setValue);
+    connect( m_Slider,      &QSlider::sliderMoved,  this,      [&](int value) { QToolTip::showText(QCursor::pos(), QString("%1").arg(value)); });
+    connect(m_SpinBox, SIGNAL(valueChanged(int)),   m_Slider,  SLOT(setValue(int)));
 
     m_Layout = new QGridLayout;
     m_Layout->addWidget( m_Slider, 0, 0,          1, sliderSpan);
@@ -42,26 +32,22 @@ EnhancedSlider::EnhancedSlider(int sliderSpan /*= 5*/, QWidget* parent /*= nullp
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QSlider* EnhancedSlider::getSlider() const
-{
+QSlider* EnhancedSlider::getSlider() const {
     return m_Slider;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QSpinBox* EnhancedSlider::getSpinBox() const
-{
+QSpinBox* EnhancedSlider::getSpinBox() const {
     return m_SpinBox;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QLayout* EnhancedSlider::getLayout() const
-{
+QLayout* EnhancedSlider::getLayout() const {
     return m_Layout;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QLayout* EnhancedSlider::getLayoutWithLabel(const QString& label, int sldStretch /*= 5*/)
-{
+QLayout* EnhancedSlider::getLayoutWithLabel(const QString& label, int sldStretch /*= 5*/) {
     QHBoxLayout* layout = new QHBoxLayout;
     layout->addWidget(new QLabel(label), 1);
     layout->addLayout(m_Layout, sldStretch);
@@ -70,8 +56,7 @@ QLayout* EnhancedSlider::getLayoutWithLabel(const QString& label, int sldStretch
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QGroupBox* EnhancedSlider::getGroupBox(const QString& title)
-{
+QGroupBox* EnhancedSlider::getGroupBox(const QString& title) {
     if(m_GroupBox == nullptr) {
         m_GroupBox = new QGroupBox(title);
         m_GroupBox->setLayout(m_Layout);
@@ -81,33 +66,28 @@ QGroupBox* EnhancedSlider::getGroupBox(const QString& title)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedSlider::setTracking(bool tracking)
-{
+void EnhancedSlider::setTracking(bool tracking) {
     m_Slider->setTracking(tracking);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedSlider::setRange(int minVal, int maxVal)
-{
+void EnhancedSlider::setRange(int minVal, int maxVal) {
     m_Slider->setRange(minVal, maxVal);
     m_SpinBox->setRange(minVal, maxVal);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedSlider::setValue(int value)
-{
+void EnhancedSlider::setValue(int value) {
     m_Slider->setValue(value);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-int EnhancedSlider::getValue() const
-{
+int EnhancedSlider::getValue() const {
     return m_Slider->value();
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedSlider::prevItem()
-{
+void EnhancedSlider::prevItem() {
     int currentVal = m_Slider->value();
 
     if(currentVal > m_Slider->minimum()) {
@@ -116,8 +96,7 @@ void EnhancedSlider::prevItem()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedSlider::nextItem()
-{
+void EnhancedSlider::nextItem() {
     int currentVal = m_Slider->value();
 
     if(currentVal < m_Slider->maximum()) {
@@ -126,8 +105,7 @@ void EnhancedSlider::nextItem()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedSlider::setEnabled(bool enabled)
-{
+void EnhancedSlider::setEnabled(bool enabled) {
     m_Slider->setEnabled(enabled);
     m_SpinBox->setEnabled(enabled);
 }

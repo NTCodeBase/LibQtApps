@@ -21,8 +21,7 @@
 #include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class ColorPicker : public QWidget
-{
+class ColorPicker : public QWidget {
     Q_OBJECT
 public:
     ColorPicker(QWidget* parent = 0, QSize size = QSize(50, 25));
@@ -52,7 +51,7 @@ protected:
 
 private:
     QSize        m_DefaultSize;
-    QColor       m_CurrentColor;
-    QGroupBox*   m_GroupBox;
-    QGridLayout* m_Layout;
+    QColor       m_CurrentColor = Qt::blue;
+    QGroupBox*   m_GroupBox     = nullptr;
+    QGridLayout* m_Layout       = nullptr;
 };

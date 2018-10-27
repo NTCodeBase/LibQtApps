@@ -15,16 +15,14 @@
 #include <LibQtApps/BusyBar.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-BusyBar::BusyBar(QWidget* parent /*= 0*/, Style style /*= Cycle*/, int interval /*= 0*/) : QProgressBar(parent), m_Style(style), m_Value(0)
-{
+BusyBar::BusyBar(QWidget* parent /*= 0*/, Style style /*= Cycle*/, int interval /*= 0*/) : QProgressBar(parent), m_Style(style), m_Value(0) {
     setTextVisible(false);
     setMinimum(0);
     setMaximum(100);
 
     ////////////////////////////////////////////////////////////////////////////////
     m_Timer.setInterval(interval);
-    connect(&m_Timer, &QTimer::timeout, [&]
-            {
+    connect(&m_Timer, &QTimer::timeout, [&] {
                 if(m_Style == Cycle) {
                     ++m_Value;
                     if(m_Value > 100) {
@@ -42,8 +40,7 @@ BusyBar::BusyBar(QWidget* parent /*= 0*/, Style style /*= Cycle*/, int interval 
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void BusyBar::setBusy(bool busy)
-{
+void BusyBar::setBusy(bool busy) {
     if(busy) {
         m_Timer.start();
     } else {
@@ -52,8 +49,7 @@ void BusyBar::setBusy(bool busy)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void BusyBar::reset()
-{
+void BusyBar::reset() {
     setBusy(false);
     m_Value = 0;
     setValue(m_Value);

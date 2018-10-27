@@ -13,14 +13,11 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 #pragma once
-
 #include <LibOpenGL/ShaderProgram.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class QtAppShaderProgram : public ShaderProgram
-{
+class QtAppShaderProgram : public ShaderProgram {
 public:
-
     QtAppShaderProgram() {}
     QtAppShaderProgram(const std::string& programName) : ShaderProgram(programName) {}
 

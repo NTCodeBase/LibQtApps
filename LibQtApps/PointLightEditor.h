@@ -15,7 +15,7 @@
 #pragma once
 
 #include <LibOpenGL/Lights.h>
-#include <LibQtApps/ColorPicker.h>
+#include <LibQtApps/Forward.h>
 
 #include <QtWidgets>
 #include <vector>
@@ -25,8 +25,7 @@
 #define MAX_POINT_LIGHT 4
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class PointLightEditor : public QWidget
-{
+class PointLightEditor : public QWidget {
     Q_OBJECT
 
 public:

@@ -15,28 +15,23 @@
 #include <LibQtApps/ColorPicker.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-ColorPicker::ColorPicker(QWidget* parent /*= 0*/, QSize size /*= QSize(50, 25)*/) :
-    QWidget(parent), m_DefaultSize(size), m_CurrentColor(Qt::blue), m_GroupBox(nullptr), m_Layout(nullptr)
-{
+ColorPicker::ColorPicker(QWidget* parent /*= 0*/, QSize size /*= QSize(50, 25)*/) : QWidget(parent), m_DefaultSize(size) {
     setMouseTracking(true);
     setAutoFillBackground(true);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ColorPicker::setDefaultSize(QSize size)
-{
+void ColorPicker::setDefaultSize(QSize size) {
     m_DefaultSize = size;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QSize ColorPicker::sizeHint() const
-{
+QSize ColorPicker::sizeHint() const {
     return m_DefaultSize;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QLayout* ColorPicker::getLayout(const QString& label, int labelStretch /*= 5*/)
-{
+QLayout* ColorPicker::getLayout(const QString& label, int labelStretch /*= 5*/) {
     if(m_Layout == nullptr) {
         m_Layout = new QGridLayout;
 
@@ -52,8 +47,7 @@ QLayout* ColorPicker::getLayout(const QString& label, int labelStretch /*= 5*/)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QGroupBox* ColorPicker::getGroupBox(const QString& title /*= QString("")*/, const QString& label /*= QString("")*/)
-{
+QGroupBox* ColorPicker::getGroupBox(const QString& title /*= QString("")*/, const QString& label /*= QString("")*/) {
     if(m_GroupBox == nullptr) {
         m_GroupBox = new QGroupBox(title);
         m_GroupBox->setLayout(getLayout(label));
@@ -63,8 +57,7 @@ QGroupBox* ColorPicker::getGroupBox(const QString& title /*= QString("")*/, cons
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ColorPicker::setColor(QColor color)
-{
+void ColorPicker::setColor(QColor color) {
     QPalette palette = this->palette();
     palette.setColor(QPalette::Window, color);
     this->setPalette(palette);
@@ -73,8 +66,7 @@ void ColorPicker::setColor(QColor color)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ColorPicker::paintEvent(QPaintEvent* e)
-{
+void ColorPicker::paintEvent(QPaintEvent* e) {
     QPainter painter(this);
     painter.drawRoundedRect(1, 1, width() - 1, height() - 1, 1, 1);
 
@@ -82,8 +74,7 @@ void ColorPicker::paintEvent(QPaintEvent* e)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ColorPicker::mousePressEvent(QMouseEvent*)
-{
+void ColorPicker::mousePressEvent(QMouseEvent*) {
     QColor color = QColorDialog::getColor(m_CurrentColor, this);
     if(color.isValid()) {
         setColor(color);
@@ -97,15 +88,13 @@ void ColorPicker::mousePressEvent(QMouseEvent*)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ColorPicker::enterEvent(QEvent*)
-{
+void ColorPicker::enterEvent(QEvent*) {
     if(isEnabled()) {
         QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
     }
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void ColorPicker::leaveEvent(QEvent*)
-{
+void ColorPicker::leaveEvent(QEvent*) {
     QApplication::restoreOverrideCursor();
 }

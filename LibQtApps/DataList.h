@@ -18,8 +18,7 @@
 #include <QMap>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class DataList : public QWidget
-{
+class DataList : public QWidget {
     Q_OBJECT
 
 public:
@@ -48,7 +47,7 @@ private:
     bool         m_bAddOrderText;
     QString      m_IndexSeparator;
     QString      m_ListFile;
-    QListWidget* m_ListWidget;
     QStringList  m_DataList;
-    QLabel*      m_lblStatus;
+    QListWidget* m_ListWidget = nullptr;
+    QLabel*      m_lblStatus  = nullptr;
 };

@@ -19,8 +19,7 @@
 #include <QObject>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class AvgTimer : public QObject
-{
+class AvgTimer : public QObject {
     Q_OBJECT
 
     using Clock    = std::chrono::high_resolution_clock;
@@ -29,8 +28,7 @@ class AvgTimer : public QObject
 public:
     AvgTimer(QObject* parent = nullptr, double updatePeriod = 2000) : QObject(parent), m_UpdatePeriod(updatePeriod) {}
 
-    void tick()
-    {
+    void tick() {
         assert(!m_isTimerStarted);
         m_isTimerStarted = true;
         m_TickTime       = Clock::now();
@@ -40,8 +38,7 @@ public:
         }
     }
 
-    void tock()
-    {
+    void tock() {
         assert(m_isTimerStarted);
         m_TockTime       = Clock::now();
         m_isTimerStarted = false;

@@ -15,15 +15,7 @@
 #include <LibQtApps/EnhancedComboBox.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-EnhancedComboBox::EnhancedComboBox(int comboBoxSpan /*= 3*/, QWidget* parent /*= nullptr*/) :
-    QWidget(parent),
-    m_ComboBox(nullptr),
-    m_GroupBox(nullptr),
-    m_Layout(nullptr),
-    m_btnPrev(nullptr),
-    m_btnNext(nullptr),
-    m_enabledCycling(true)
-{
+EnhancedComboBox::EnhancedComboBox(int comboBoxSpan /*= 3*/, QWidget* parent /*= nullptr*/) : QWidget(parent) {
     m_ComboBox = new QComboBox;
     connect(m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),           [&](int idx) { emit currentIndexChanged(idx); });
     connect(m_ComboBox, static_cast<void (QComboBox::*)(const QString&)>(&QComboBox::currentTextChanged), [&](const QString& str) { emit currentTextChanged(str); });
@@ -43,8 +35,7 @@ EnhancedComboBox::EnhancedComboBox(int comboBoxSpan /*= 3*/, QWidget* parent /*=
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QLayout* EnhancedComboBox::getLayoutWithLabel(const QString& label, int comboStretch /*= 5*/)
-{
+QLayout* EnhancedComboBox::getLayoutWithLabel(const QString& label, int comboStretch /*= 5*/) {
     QHBoxLayout* layout = new QHBoxLayout;
     layout->addWidget(new QLabel(label), 1);
     layout->addLayout(m_Layout, comboStretch);
@@ -52,8 +43,7 @@ QLayout* EnhancedComboBox::getLayoutWithLabel(const QString& label, int comboStr
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-QGroupBox* EnhancedComboBox::getGroupBox(const QString& title)
-{
+QGroupBox* EnhancedComboBox::getGroupBox(const QString& title) {
     if(m_GroupBox == nullptr) {
         m_GroupBox = new QGroupBox(title);
         m_GroupBox->setLayout(m_Layout);
@@ -62,24 +52,21 @@ QGroupBox* EnhancedComboBox::getGroupBox(const QString& title)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedComboBox::setEnabled(bool bEnable)
-{
+void EnhancedComboBox::setEnabled(bool bEnable) {
     m_ComboBox->setEnabled(bEnable);
     m_btnPrev->setEnabled(bEnable);
     m_btnNext->setEnabled(bEnable);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedComboBox::setDisabled(bool bDisable)
-{
+void EnhancedComboBox::setDisabled(bool bDisable) {
     m_ComboBox->setDisabled(bDisable);
     m_btnPrev->setDisabled(bDisable);
     m_btnNext->setDisabled(bDisable);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedComboBox::prevItem()
-{
+void EnhancedComboBox::prevItem() {
     int currentIndex = m_ComboBox->currentIndex();
 
     if(currentIndex > 0) {
@@ -90,10 +77,8 @@ void EnhancedComboBox::prevItem()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void EnhancedComboBox::nextItem()
-{
+void EnhancedComboBox::nextItem() {
     int currentIndex = m_ComboBox->currentIndex();
-
     if(currentIndex < m_ComboBox->count() - 1) {
         m_ComboBox->setCurrentIndex(currentIndex + 1);
     } else if(m_enabledCycling) {

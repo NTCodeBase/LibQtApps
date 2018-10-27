@@ -17,13 +17,11 @@
 #include <QtWidgets>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class BusyBar : public QProgressBar
-{
+class BusyBar : public QProgressBar {
     Q_OBJECT
 
 public:
-    enum Style
-    {
+    enum Style {
         Cycle,
         BouncingBack
     };

@@ -12,10 +12,31 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+#include <LibOpenGL/RenderObjects.h>
+#include <LibQtApps/ColorPicker.h>
+#include <LibQtApps/EnhancedComboBox.h>
+#include <LibQtApps/EnhancedSlider.h>
+#include <LibQtApps/OpenGLWidget.h>
 #include <LibQtApps/OpenGLController.h>
+#include <LibQtApps/PointLightEditor.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLController::setupBasicGUI(Int width) {
+OpenGLController::OpenGLController(OpenGLWidget* renderWidget, QWidget* parent, int width /*= 350*/, bool bShowBackgroundControllers /*= true*/,
+                                   bool bShowFloorControllers /*= true*/, bool bShowBoxControllers /*= true*/) :
+    QWidget(parent), m_GLWidget(renderWidget),
+    m_bShowBackgroundControllers(bShowBackgroundControllers),
+    m_bShowFloorControllers(bShowFloorControllers),
+    m_bShowBoxControllers(bShowBoxControllers) {
+    __NT_REQUIRE(m_GLWidget != nullptr);
+    setupBasicGUI(width);
+    connectBasicWidgets();
+    if(!m_bShowBackgroundControllers) { m_grBackgroundCtrl->setVisible(false); }
+    if(!m_bShowFloorControllers) { m_grFloorCtrl->setVisible(false); }
+    if(!m_bShowBoxControllers) { m_grBoxCtrl->setVisible(false); }
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLController::setupBasicGUI(int width) {
     setupBackgroundControllers();
     setupFloorControllers();
     setupBoxControllers();
@@ -119,17 +140,22 @@ void OpenGLController::setupBackgroundControllers() {
     layoutBackgroundType->addWidget(rdbBackgroundCheckerboard, 1, 0, 1, 1);
     layoutBackgroundType->addWidget(rdbBackgroundGrid,         1, 1, 1, 1);
     ////////////////////////////////////////////////////////////////////////////////
-    QWidget* wSkyTex = new QWidget;
+    m_cbSkyTexture = new EnhancedComboBox;
     m_cbSkyTexture->getLayout()->setContentsMargins(0, 0, 0, 0);
+    QWidget* wSkyTex = new QWidget;
     wSkyTex->setLayout(m_cbSkyTexture->getLayout());
     wSkyTex->setMinimumHeight(25);
     ////////////////////////////////////////////////////////////////////////////////
+    m_pkrBackgroundColor = new ColorPicker;
     m_pkrBackgroundColor->setMaximumHeight(25);
     m_pkrBackgroundColor->setVisible(false);
     m_pkrBackgroundColor->setColor(m_GLWidget->getClearColor());
     ////////////////////////////////////////////////////////////////////////////////
+    m_sldCheckerboardScale = new EnhancedSlider;
     m_sldCheckerboardScale->setRange(2, 100);
     m_sldCheckerboardScale->setValue(CheckerboardBackgroundRender::getDefaultScales().x);
+    m_pkrCheckerColor1 = new ColorPicker;
+    m_pkrCheckerColor2 = new ColorPicker;
     m_pkrCheckerColor1->setColor(CheckerboardBackgroundRender::getDefaultColor1());
     m_pkrCheckerColor2->setColor(CheckerboardBackgroundRender::getDefaultColor2());
 
@@ -182,9 +208,11 @@ void OpenGLController::setupBackgroundControllers() {
     connect(rdbBackgroundCheckerboard, &QRadioButton::toggled, wCheckerboard,        &QWidget::setVisible);
     connect(rdbBackgroundGrid,         &QRadioButton::toggled, wGrid,                &QWidget::setVisible);
     ////////////////////////////////////////////////////////////////////////////////
+    m_grBackgroundCtrl = new QGroupBox("Background");
     m_grBackgroundCtrl->setLayout(layoutBackground);
     m_LayoutMainControllers->addWidget(m_grBackgroundCtrl);
     ////////////////////////////////////////////////////////////////////////////////
+    m_smBackgroundMode = new QSignalMapper;
     connect(rdbBackgroundSkyBox,       SIGNAL(clicked()), m_smBackgroundMode, SLOT(map()));
     connect(rdbBackgroundColor,        SIGNAL(clicked()), m_smBackgroundMode, SLOT(map()));
     connect(rdbBackgroundCheckerboard, SIGNAL(clicked()), m_smBackgroundMode, SLOT(map()));
@@ -213,18 +241,21 @@ void OpenGLController::loadSkyBoxTextures() {
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLController::setupFloorControllers() {
+    m_sldFloorSize = new EnhancedSlider;
     m_sldFloorSize->setRange(1, 100);
     m_sldFloorSize->getSlider()->setValue(10);
     auto layoutFloorSize = new QHBoxLayout;
     layoutFloorSize->addWidget(new QLabel("Size:"), 1);
     layoutFloorSize->addLayout(m_sldFloorSize->getLayout(), 5);
     ////////////////////////////////////////////////////////////////////////////////
+    m_sldFloorY = new EnhancedSlider;
     m_sldFloorY->setRange(-100, 100);
     m_sldFloorY->getSlider()->setValue(0);
     auto layoutFloorY = new QHBoxLayout;
     layoutFloorY->addWidget(new QLabel("Y (x100):"), 1);
     layoutFloorY->addLayout(m_sldFloorY->getLayout(), 5);
     ////////////////////////////////////////////////////////////////////////////////
+    m_sldFloorExposure = new EnhancedSlider;
     m_sldFloorExposure->setRange(0, 100);
     m_sldFloorExposure->getSlider()->setValue(50);
     auto layoutFloorExposure = new QHBoxLayout;
@@ -232,6 +263,7 @@ void OpenGLController::setupFloorControllers() {
     layoutFloorExposure->addLayout(m_sldFloorExposure->getLayout(), 5);
     ////////////////////////////////////////////////////////////////////////////////
     auto floorLayout = new QVBoxLayout;
+    m_cbFloorTexture = new EnhancedComboBox;
     floorLayout->addLayout(m_cbFloorTexture->getLayout());
     floorLayout->addSpacing(10);
     floorLayout->addWidget(QtAppUtils::getLineSeparator());
@@ -239,6 +271,7 @@ void OpenGLController::setupFloorControllers() {
     floorLayout->addLayout(layoutFloorY);
     floorLayout->addLayout(layoutFloorExposure);
     ////////////////////////////////////////////////////////////////////////////////
+    m_grFloorCtrl = new QGroupBox("Floor Texture");
     m_grFloorCtrl->setLayout(floorLayout);
     m_LayoutMainControllers->addWidget(m_grFloorCtrl);
     ////////////////////////////////////////////////////////////////////////////////
@@ -260,6 +293,8 @@ void OpenGLController::loadFloorTextures() {
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLController::setupBoxControllers() {
+    m_chkRenderBox = new QCheckBox("Render box");
+    m_pkrBoxColor  = new ColorPicker;
     m_chkRenderBox->setChecked(true);
     m_pkrBoxColor->setMinimumHeight(20);
     m_pkrBoxColor->setColor(WireFrameBoxRender::getDefaultBoxColor());
@@ -268,6 +303,7 @@ void OpenGLController::setupBoxControllers() {
     QHBoxLayout* layoutBoxCtrl = new QHBoxLayout;
     layoutBoxCtrl->addWidget(m_chkRenderBox);
     layoutBoxCtrl->addWidget(m_pkrBoxColor);
+    m_grBoxCtrl = new QGroupBox("Domain Box");
     m_grBoxCtrl->setLayout(layoutBoxCtrl);
     m_LayoutMainControllers->addWidget(m_grBoxCtrl);
 }
