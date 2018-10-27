@@ -122,6 +122,11 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* ev) {
             }
             break;
 
+        case Qt::Key_X:
+            enableClipPlane(!m_bEnabledClipPlane);
+            emit clipPlaneEnabled(m_bEnabledClipPlane);
+            break;
+
         case Qt::Key_F9:
             m_ClipPlaneEditor->show();
             break;
@@ -339,6 +344,7 @@ bool OpenGLWidget::exportScreenToImage(int frame) {
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLWidget::enableClipPlane(bool bEnable) {
     if(isValid()) {
+        m_bEnabledClipPlane = bEnable;
         makeCurrent();
         if(bEnable) {
             glCall(glEnable(GL_CLIP_PLANE0));

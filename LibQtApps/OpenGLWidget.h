@@ -133,14 +133,17 @@ protected:
 
     ////////////////////////////////////////////////////////////////////////////////
     // clip plane
+signals:
+    void clipPlaneEnabled(bool bEnable);
 public slots:
     void enableClipPlane(bool bEnable);
     void setClipPlane(const Vec4f& clipPlane) { m_ClipPlane = clipPlane; }
     void showClipPlaneEditor();
 
 protected:
-    ClipPlaneEditor* m_ClipPlaneEditor = nullptr;
-    Vec4f            m_ClipPlane       = Vec4f(1.0f, 0.0f, 0.0f, 0.0f);
+    bool             m_bEnabledClipPlane = false;
+    ClipPlaneEditor* m_ClipPlaneEditor   = nullptr;
+    Vec4f            m_ClipPlane         = Vec4f(1.0f, 0.0f, 0.0f, 0.0f);
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
