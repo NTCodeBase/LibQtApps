@@ -121,7 +121,6 @@ void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget) {
     if(m_GLWidget != nullptr) {
         delete m_GLWidget;
     }
-
     m_GLWidget = glWidget;
     setCentralWidget(m_GLWidget);
     connect(&m_GLWidget->m_FPSCounter, &FPSCounter::fpsChanged,                  this, &OpenGLMainWindow::updateStatusFrameRate);

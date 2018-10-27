@@ -22,7 +22,6 @@
 #include <LibOpenGL/RenderObjects.h>
 
 #include <LibQtApps/QtAppMacros.h>
-#include <LibQtApps/AvgTimer.h>
 #include <LibQtApps/FPSCounter.h>
 #include <LibQtApps/QtAppUtils.h>
 
