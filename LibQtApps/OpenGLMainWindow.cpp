@@ -12,13 +12,16 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+#include <LibQtApps/ClipPlaneEditor.h>
+#include <LibQtApps/OpenGLWidget.h>
 #include <LibQtApps/OpenGLMainWindow.h>
+#include <ArthurStyle/arthurstyle.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-OpenGLMainWindow::OpenGLMainWindow(QWidget* parent, bool bShowFPS /*= true*/, bool bShowCamPosition /*= true*/) : QMainWindow(parent)
-{
+OpenGLMainWindow::OpenGLMainWindow(QWidget* parent, bool bShowFPS /*= true*/, bool bShowCamPosition /*= true*/) : QMainWindow(parent) {
     qApp->installEventFilter(this);
-    m_VSync = (QSurfaceFormat::defaultFormat().swapInterval() > 0);
+    m_ClipPlaneEditor = new ClipPlaneEditor;
+    m_VSync           = (QSurfaceFormat::defaultFormat().swapInterval() > 0);
     ////////////////////////////////////////////////////////////////////////////////
     // setup status bar
     m_lblStatusFPS = new QLabel(this);
@@ -41,8 +44,7 @@ OpenGLMainWindow::OpenGLMainWindow(QWidget* parent, bool bShowFPS /*= true*/, bo
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev)
-{
+bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev) {
     switch(ev->key()) {
         case Qt::Key_Escape:
             close();
@@ -54,8 +56,7 @@ bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-bool OpenGLMainWindow::eventFilter(QObject*, QEvent* ev)
-{
+bool OpenGLMainWindow::eventFilter(QObject*, QEvent* ev) {
     switch(ev->type()) {
         case QEvent::KeyPress:
             return processKeyPressEvent(static_cast<QKeyEvent*>(ev));
@@ -67,8 +68,7 @@ bool OpenGLMainWindow::eventFilter(QObject*, QEvent* ev)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLMainWindow::setArthurStyle()
-{
+void OpenGLMainWindow::setArthurStyle() {
     QStyle* arthurStyle = new ArthurStyle();
     setStyle(arthurStyle);
     ////////////////////////////////////////////////////////////////////////////////
@@ -84,8 +84,7 @@ void OpenGLMainWindow::setArthurStyle()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLMainWindow::showFPS(bool bShowFPS)
-{
+void OpenGLMainWindow::showFPS(bool bShowFPS) {
     if(bShowFPS) {
         m_lblStatusFPS->show();
     } else {
@@ -94,8 +93,7 @@ void OpenGLMainWindow::showFPS(bool bShowFPS)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLMainWindow::showCameraPosition(bool bShowCamPosition)
-{
+void OpenGLMainWindow::showCameraPosition(bool bShowCamPosition) {
     if(bShowCamPosition) {
         m_lblStatusCameraInfo->show();
     } else {
@@ -104,14 +102,12 @@ void OpenGLMainWindow::showCameraPosition(bool bShowCamPosition)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLMainWindow::updateStatusFrameRate(double fps)
-{
+void OpenGLMainWindow::updateStatusFrameRate(double fps) {
     m_lblStatusFPS->setText(QString("FPS: %1 (%2 ms/frame) | VSync: %3").arg(fps).arg(1000.0 / fps).arg(m_VSync ? "On" : "Off"));
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLMainWindow::updateStatusCameraInfo(const Vec3f& camPosition, const Vec3f& camFocus)
-{
+void OpenGLMainWindow::updateStatusCameraInfo(const Vec3f& camPosition, const Vec3f& camFocus) {
     m_lblStatusCameraInfo->setText(QString("Camera: [%1, %2, %3] | Focus: [%4, %5, %6]")
                                        .arg(camPosition[0], 0, 'f', 2)
                                        .arg(camPosition[1], 0, 'f', 2)
@@ -122,8 +118,7 @@ void OpenGLMainWindow::updateStatusCameraInfo(const Vec3f& camPosition, const Ve
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget)
-{
+void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget) {
     __NT_REQUIRE(glWidget != nullptr);
     if(m_GLWidget != nullptr) {
         delete m_GLWidget;
@@ -131,6 +126,7 @@ void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget)
 
     m_GLWidget = glWidget;
     setCentralWidget(m_GLWidget);
-    connect(&m_GLWidget->m_FPSCounter, &FPSCounter::fpsChanged,                  this, &OpenGLMainWindow::updateStatusFrameRate);
-    connect(m_GLWidget,                &OpenGLWidget::cameraPositionInfoChanged, this, &OpenGLMainWindow::updateStatusCameraInfo);
+    connect(&m_GLWidget->m_FPSCounter, &FPSCounter::fpsChanged,                  this,       &OpenGLMainWindow::updateStatusFrameRate);
+    connect(m_GLWidget,                &OpenGLWidget::cameraPositionInfoChanged, this,       &OpenGLMainWindow::updateStatusCameraInfo);
+    connect(m_ClipPlaneEditor,         &ClipPlaneEditor::clipPlaneChanged,       m_GLWidget, &OpenGLWidget::setClipPlane);
 }

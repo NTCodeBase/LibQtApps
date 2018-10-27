@@ -14,15 +14,15 @@
 
 #pragma once
 
+#include <LibCommon/CommonSetup.h>
 #include <QtWidgets>
 #include <QtGui>
 
-#include <ArthurStyle/arthurstyle.h>
-#include <LibQtApps/OpenGLWidget.h>
-
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class OpenGLMainWindow : public QMainWindow
-{
+class OpenGLWidget;
+class ClipPlaneEditor;
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+class OpenGLMainWindow : public QMainWindow {
     Q_OBJECT
 public:
     OpenGLMainWindow(QWidget* parent, bool bShowFPS = true, bool bShowCamPosition = true);
@@ -44,8 +44,9 @@ protected:
     void setupOpenglWidget(OpenGLWidget* glWidget);
 
     ////////////////////////////////////////////////////////////////////////////////
-    QLabel*       m_lblStatusFPS        = nullptr;
-    QLabel*       m_lblStatusCameraInfo = nullptr;
-    OpenGLWidget* m_GLWidget            = nullptr;
-    bool          m_VSync               = true;
+    QLabel*          m_lblStatusFPS        = nullptr;
+    QLabel*          m_lblStatusCameraInfo = nullptr;
+    OpenGLWidget*    m_GLWidget        = nullptr;
+    ClipPlaneEditor* m_ClipPlaneEditor = nullptr;
+    bool             m_VSync           = true;
 };
