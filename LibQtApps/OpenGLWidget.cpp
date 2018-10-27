@@ -122,6 +122,10 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* ev) {
             }
             break;
 
+        case Qt::Key_F9:
+            m_ClipPlaneEditor->show();
+            break;
+
         default:
             ;
     }
