@@ -18,8 +18,7 @@
 #include <LibCommon/CommonSetup.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-class ClipPlaneEditor : public QWidget
-{
+class ClipPlaneEditor : public QWidget {
     Q_OBJECT
 
 public:
@@ -39,6 +38,9 @@ private:
     void setupGUI();
 
     Vec4f      m_ClipPlane = Vec4f(1, 0, 0, 0);
-    QSlider*   m_sldCoeffs[4];
+    float      m_MaxValue  = 1.0f;
+    QLineEdit* m_txtMaxValue;
+    QSlider*   m_sldMaxValue;
     QLineEdit* m_txtCoeffs[4];
+    QSlider*   m_sldCoeffs[4];
 };
