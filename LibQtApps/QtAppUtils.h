@@ -20,16 +20,14 @@
 #include <QString>
 #include <QDir>
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-namespace QtAppUtils
-{
+namespace QtAppUtils {
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 inline QColor floatToQColor(float r, float g, float b) { return QColor(static_cast<int>(255 * r), static_cast<int>(255 * g), static_cast<int>(255 * b)); }
 inline QColor floatToQColor(const Vec3f& color) { return floatToQColor(color.x, color.y, color.z); }
 inline Vec3f  QColorToFloat(const QColor& color) { return Vec3f(color.redF(), color.greenF(), color.blueF()); }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline QString getTexturePath()
-{
+inline QString getTexturePath() {
     AppConfigReader config("config.ini");
     if(config.isFileLoaded() && config.hasParam("TexturePath")) {
         return QString::fromStdString(config.getStringValue("TexturePath"));
@@ -38,23 +36,20 @@ inline QString getTexturePath()
     }
 }
 
-inline QStringList getTextureFolders(const QString& texType)
-{
+inline QStringList getTextureFolders(const QString& texType) {
     QDir dataDir(getTexturePath() + "/" + texType);
     dataDir.setFilter(QDir::NoDotAndDotDot | QDir::Dirs);
     return dataDir.entryList();
 }
 
-inline QStringList getTextureFiles(const QString& texType)
-{
+inline QStringList getTextureFiles(const QString& texType) {
     QDir dataDir(getTexturePath() + "/" + texType);
     dataDir.setFilter(QDir::NoDotAndDotDot | QDir::Files);
     return dataDir.entryList();
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline QString getDefaultPath(const String& folderName)
-{
+inline QString getDefaultPath(const String& folderName) {
     String          folderParams = folderName + "Path";
     AppConfigReader config("config.ini");
     if(config.isFileLoaded() && config.hasParam(folderParams)) {
@@ -65,8 +60,7 @@ inline QString getDefaultPath(const String& folderName)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline QString getVariable(const String& variableName)
-{
+inline QString getVariable(const String& variableName) {
     AppConfigReader config("config.ini");
     if(config.isFileLoaded() && config.hasParam(variableName)) {
         return QString::fromStdString(config.getStringValue(variableName));
@@ -76,8 +70,7 @@ inline QString getVariable(const String& variableName)
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline QStringList getFiles(const QString& folderName, const QStringList fileFilter = QStringList())
-{
+inline QStringList getFiles(const QString& folderName, const QStringList fileFilter = QStringList()) {
     QDir dataDir(folderName);
     dataDir.setFilter(QDir::NoDotAndDotDot | QDir::Files);
     dataDir.setNameFilters(fileFilter);
@@ -85,14 +78,12 @@ inline QStringList getFiles(const QString& folderName, const QStringList fileFil
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline QString getDefaultCapturePath()
-{
+inline QString getDefaultCapturePath() {
     return getDefaultPath("Capture");
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline Int getDefaultSceneID()
-{
+inline Int getDefaultSceneID() {
     AppConfigReader config("config.ini");
     if(config.isFileLoaded() && config.hasParam("SceneID")) {
         return config.getIntValue("SceneID");
@@ -102,8 +93,7 @@ inline Int getDefaultSceneID()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline QSize getDefaultWindowSize()
-{
+inline QSize getDefaultWindowSize() {
     AppConfigReader config("config.ini");
     if(config.isFileLoaded() && config.hasParam("DefaultWindowSizeW") && config.hasParam("DefaultWindowSizeH")) {
         return QSize(config.getIntValue("DefaultWindowSizeW"), config.getIntValue("DefaultWindowSizeH"));
@@ -113,8 +103,7 @@ inline QSize getDefaultWindowSize()
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline Vec4f getDefaultClearColor(const Vec4f& fallBackColor = Vec4f(0.38f, 0.52f, 0.10f, 1.0f))
-{
+inline Vec4f getDefaultClearColor(const Vec4f& fallBackColor = Vec4f(0.38f, 0.52f, 0.10f, 1.0f)) {
     AppConfigReader config("config.ini");
     if(config.isFileLoaded() &&
        config.hasParam("DefaultClearColorR") &&
@@ -130,8 +119,7 @@ inline Vec4f getDefaultClearColor(const Vec4f& fallBackColor = Vec4f(0.38f, 0.52
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline auto getDefaultCamera(const Vec3f& fallBackCamPosition = Vec3f(-5, 1, 0), const Vec3f& fallBackCamFocus = Vec3f(0))
-{
+inline auto getDefaultCamera(const Vec3f& fallBackCamPosition = Vec3f(-5, 1, 0), const Vec3f& fallBackCamFocus = Vec3f(0)) {
     Vec3f camPosition = fallBackCamPosition;
     Vec3f camFocus    = fallBackCamFocus;
 
@@ -152,20 +140,18 @@ inline auto getDefaultCamera(const Vec3f& fallBackCamPosition = Vec3f(-5, 1, 0),
                              config.getFloatValue("DefaultCameraFocusZ"));
         }
     }
-    return std::make_pair(camPosition, camFocus);;
+    return std::make_pair(camPosition, camFocus);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline QFrame* getLineSeparator()
-{
+inline QFrame* getLineSeparator() {
     QFrame* line = new QFrame();
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
     return line;
 }
 
-inline QVBoxLayout* getLayoutSeparator(int spacing = 10)
-{
+inline QVBoxLayout* getLayoutSeparator(int spacing = 10) {
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addSpacing(spacing);
     layout->addWidget(getLineSeparator());
@@ -173,16 +159,14 @@ inline QVBoxLayout* getLayoutSeparator(int spacing = 10)
     return layout;
 }
 
-inline QVBoxLayout* getLayoutSpacing(int spacing = 10)
-{
+inline QVBoxLayout* getLayoutSpacing(int spacing = 10) {
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addSpacing(spacing);
     return layout;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-inline String loadResourceFile(const char* fileName)
-{
+inline String loadResourceFile(const char* fileName) {
     QFile file(fileName);
     if(!file.open(QFile::ReadOnly | QFile::Text)) {
         return String("");
@@ -192,6 +176,18 @@ inline String loadResourceFile(const char* fileName)
     auto fileContent = in.readAll().toStdString();
     file.close();
     return fileContent;
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+inline void setVisibleAll(QLayout* layout, bool bVisible) {
+    for(int i = 0; i < layout->count(); ++i) {
+        auto item = layout->itemAt(i);
+        if(QWidget* w = item->widget(); w != NULL) {
+            w->setVisible(bVisible);
+        } else if(QLayout* l = item->layout(); l != NULL) {
+            setVisibleAll(l, bVisible);
+        }
+    }
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
