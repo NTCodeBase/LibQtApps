@@ -133,6 +133,8 @@ protected:
 
     ////////////////////////////////////////////////////////////////////////////////
     // clip plane
+public:
+    bool isClipPlaneEnabled() const { return m_bEnabledClipPlane; }
 signals:
     void clipPlaneEnabled(bool bEnable);
 public slots:

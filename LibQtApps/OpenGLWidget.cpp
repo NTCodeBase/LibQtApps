@@ -122,15 +122,6 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* ev) {
             }
             break;
 
-        case Qt::Key_X:
-            enableClipPlane(!m_bEnabledClipPlane);
-            emit clipPlaneEnabled(m_bEnabledClipPlane);
-            break;
-
-        case Qt::Key_F9:
-            m_ClipPlaneEditor->show();
-            break;
-
         default:
             ;
     }
@@ -352,6 +343,7 @@ void OpenGLWidget::enableClipPlane(bool bEnable) {
             glCall(glDisable(GL_CLIP_PLANE0));
         }
         doneCurrent();
+        emit clipPlaneEnabled(m_bEnabledClipPlane);
     }
 }
 

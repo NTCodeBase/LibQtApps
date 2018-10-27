@@ -94,9 +94,14 @@ void OpenGLController::connectBasicWidgets() {
     // buttons
     connect(m_btnResetCamera,   &QPushButton::clicked,           m_GLWidget,         &OpenGLWidget::resetCameraPosition);
     connect(m_btnLockCamera,    &QPushButton::clicked,           m_GLWidget,         &OpenGLWidget::lockCamera);
-    connect(m_btnClipViewPlane, &QPushButton::clicked,           m_GLWidget,         &OpenGLWidget::enableClipPlane);
-    connect(m_btnEditClipPlane, &QPushButton::clicked,           m_GLWidget,         &OpenGLWidget::showClipPlaneEditor);
     connect(m_GLWidget,         &OpenGLWidget::clipPlaneEnabled, m_btnClipViewPlane, &QPushButton::setChecked);
+    connect(m_btnEditClipPlane, &QPushButton::clicked,           m_GLWidget,         &OpenGLWidget::showClipPlaneEditor);
+    connect(m_btnClipViewPlane, &QPushButton::clicked,           m_GLWidget,         &OpenGLWidget::enableClipPlane);
+    connect(m_GLWidget,         &OpenGLWidget::clipPlaneEnabled, [&](bool bEnabled) {
+                m_GLWidget->blockSignals(true);
+                m_btnClipViewPlane->setChecked(bEnabled);
+                m_GLWidget->blockSignals(false);
+            });
     ////////////////////////////////////////////////////////////////////////////////
 }
 

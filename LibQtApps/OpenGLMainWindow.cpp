@@ -48,9 +48,18 @@ bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev) {
             close();
             __NT_RAISE_ABORT_SIGNAL
 
+        case Qt::Key_X:
+            m_GLWidget->enableClipPlane(!m_GLWidget->isClipPlaneEnabled());
+            return true;
+
+        case Qt::Key_F9:
+            m_GLWidget->showClipPlaneEditor();
+            return true;
+
         default:
             return false;
     }
+    return false;
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
