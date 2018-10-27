@@ -20,7 +20,6 @@
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class OpenGLWidget;
-class ClipPlaneEditor;
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class OpenGLMainWindow : public QMainWindow {
     Q_OBJECT
@@ -44,9 +43,8 @@ protected:
     void setupOpenglWidget(OpenGLWidget* glWidget);
 
     ////////////////////////////////////////////////////////////////////////////////
-    QLabel*          m_lblStatusFPS        = nullptr;
-    QLabel*          m_lblStatusCameraInfo = nullptr;
-    OpenGLWidget*    m_GLWidget        = nullptr;
-    ClipPlaneEditor* m_ClipPlaneEditor = nullptr;
-    bool             m_VSync           = true;
+    QLabel*       m_lblStatusFPS        = nullptr;
+    QLabel*       m_lblStatusCameraInfo = nullptr;
+    OpenGLWidget* m_GLWidget = nullptr;
+    bool          m_VSync    = true;
 };

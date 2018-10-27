@@ -12,7 +12,6 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-#include <LibQtApps/ClipPlaneEditor.h>
 #include <LibQtApps/OpenGLWidget.h>
 #include <LibQtApps/OpenGLMainWindow.h>
 #include <ArthurStyle/arthurstyle.h>
@@ -20,8 +19,7 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 OpenGLMainWindow::OpenGLMainWindow(QWidget* parent, bool bShowFPS /*= true*/, bool bShowCamPosition /*= true*/) : QMainWindow(parent) {
     qApp->installEventFilter(this);
-    m_ClipPlaneEditor = new ClipPlaneEditor;
-    m_VSync           = (QSurfaceFormat::defaultFormat().swapInterval() > 0);
+    m_VSync = (QSurfaceFormat::defaultFormat().swapInterval() > 0);
     ////////////////////////////////////////////////////////////////////////////////
     // setup status bar
     m_lblStatusFPS = new QLabel(this);
@@ -126,7 +124,6 @@ void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget) {
 
     m_GLWidget = glWidget;
     setCentralWidget(m_GLWidget);
-    connect(&m_GLWidget->m_FPSCounter, &FPSCounter::fpsChanged,                  this,       &OpenGLMainWindow::updateStatusFrameRate);
-    connect(m_GLWidget,                &OpenGLWidget::cameraPositionInfoChanged, this,       &OpenGLMainWindow::updateStatusCameraInfo);
-    connect(m_ClipPlaneEditor,         &ClipPlaneEditor::clipPlaneChanged,       m_GLWidget, &OpenGLWidget::setClipPlane);
+    connect(&m_GLWidget->m_FPSCounter, &FPSCounter::fpsChanged,                  this, &OpenGLMainWindow::updateStatusFrameRate);
+    connect(m_GLWidget,                &OpenGLWidget::cameraPositionInfoChanged, this, &OpenGLMainWindow::updateStatusCameraInfo);
 }
