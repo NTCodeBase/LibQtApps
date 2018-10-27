@@ -32,6 +32,8 @@
 #include <QDir>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+class ClipPlaneEditor;
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class OpenGLWidget : public QOpenGLWidget, public OpenGLFunctions {
     Q_OBJECT
     friend class OpenGLMainWindow;
@@ -133,9 +135,11 @@ protected:
 public slots:
     void enableClipPlane(bool bEnable);
     void setClipPlane(const Vec4f& clipPlane) { m_ClipPlane = clipPlane; }
+    void showClipPlaneEditor();
 
 protected:
-    Vec4f m_ClipPlane = Vec4f(1.0f, 0.0f, 0.0f, 0.0f);
+    ClipPlaneEditor* m_ClipPlaneEditor = nullptr;
+    Vec4f            m_ClipPlane       = Vec4f(1.0f, 0.0f, 0.0f, 0.0f);
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -155,8 +159,7 @@ protected:
     ////////////////////////////////////////////////////////////////////////////////
     // sky box and checkerboard/grid background =>
 public:
-    enum BackgroundMode
-    {
+    enum BackgroundMode {
         SkyBox = 0,
         Color,
         Checkerboard,
@@ -223,8 +226,7 @@ public slots:
     void setGizmoWidgetSize(int widgetSize) { m_RDataGizmo.widgetSize = widgetSize; }
     void setGizmoWidthRatio(float widthRatio) { m_RDataGizmo.widthRatio = widthRatio; }
 protected:
-    struct RDataGizmo
-    {
+    struct RDataGizmo {
         SharedPtr<ShaderProgram> shader = nullptr;
         GLuint                   VAO;
         GLuint                   ub_CamData;

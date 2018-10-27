@@ -12,12 +12,16 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+#include <LibQtApps/ClipPlaneEditor.h>
 #include <LibQtApps/OpenGLWidget.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent) {
+    m_ClipPlaneEditor = new ClipPlaneEditor;
+    connect(m_ClipPlaneEditor,   &ClipPlaneEditor::clipPlaneChanged, this, &OpenGLWidget::setClipPlane);
+    ////////////////////////////////////////////////////////////////////////////////
     m_UpdateTimer = std::make_unique<QTimer>(this);
-    connect(m_UpdateTimer.get(), SIGNAL(timeout()), this, SLOT(update()));
+    connect(m_UpdateTimer.get(), SIGNAL(timeout()),                  this, SLOT(update()));
     m_UpdateTimer->start(0);
     ////////////////////////////////////////////////////////////////////////////////
     connect(this, &OpenGLWidget::emitDebugString, this, &OpenGLWidget::printDebugString);
@@ -339,6 +343,11 @@ void OpenGLWidget::enableClipPlane(bool bEnable) {
         }
         doneCurrent();
     }
+}
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+void OpenGLWidget::showClipPlaneEditor() {
+    m_ClipPlaneEditor->show();
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
