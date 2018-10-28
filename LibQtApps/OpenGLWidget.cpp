@@ -339,7 +339,9 @@ void OpenGLWidget::setCamera(const std::pair<Vec3f, Vec3f>& cameraInfo) {
 }
 
 void OpenGLWidget::resetCameraPosition() {
-    m_Camera->reset();
+    if(!m_bLockCamera) {
+        m_Camera->reset();
+    }
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
