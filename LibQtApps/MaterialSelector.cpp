@@ -17,13 +17,13 @@
 #include <LibQtApps/MaterialSelector.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-MaterialSelector::MaterialSelector(const Material::MaterialData& material /*= Material::MT_Emerald*/, bool defaultCustomMaterial /*= false*/,
+MaterialSelector::MaterialSelector(const MaterialData& material /*= BuildInMaterials::MT_Emerald*/, bool defaultCustomMaterial /*= false*/,
                                    int comboBoxSpan /*= 4*/, QWidget* parent /*= nullptr*/) : QWidget(parent), m_CurrentMaterial(material) {
     m_ComboBox = new EnhancedComboBox;
     QPalette palette = this->palette();
     palette.setColor(QPalette::Window, floatToQColor(m_CurrentMaterial.diffuse));
     m_MaterialColorPicker = new MaterialColorPicker;
-    connect(m_MaterialColorPicker, &MaterialColorPicker::materialChanged, this, [&](const Material::MaterialData& material) {
+    connect(m_MaterialColorPicker, &MaterialColorPicker::materialChanged, this, [&](const MaterialData& material) {
                 m_CustomMaterial = material;
                 QColor color(floatToQColor(material.diffuse));
                 m_ComboBox->getComboBox()->setItemData(m_ComboBox->count() - 1, color, Qt::DecorationRole);
@@ -45,8 +45,8 @@ MaterialSelector::MaterialSelector(const Material::MaterialData& material /*= Ma
     m_Layout->addLayout(m_ComboBox->getLayout(), 0, 0, 1, comboBoxSpan);
     m_Layout->addWidget(m_MaterialColorPicker, 0, comboBoxSpan, 1, 1);
     ////////////////////////////////////////////////////////////////////////////////
-    m_Materials = Material::getBuildInMaterials();
-    for(const Material::MaterialData& material : m_Materials) {
+    m_Materials = BuildInMaterials::getBuildInMaterials();
+    for(const MaterialData& material : m_Materials) {
         m_ComboBox->addItem(QString::fromStdString(material.name));
         QColor color(floatToQColor(material.diffuse));
         m_ComboBox->getComboBox()->setItemData(m_ComboBox->count() - 1, color, Qt::DecorationRole);
@@ -111,7 +111,7 @@ void MaterialSelector::setMaterial(int materialID) {
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialSelector::setMaterial(const Material::MaterialData& material) {
+void MaterialSelector::setMaterial(const MaterialData& material) {
     size_t mIndex = m_Materials.size();
     for(size_t i = 0; i < m_Materials.size(); ++i) {
         if(material.name == m_Materials[i].name) {
@@ -124,7 +124,7 @@ void MaterialSelector::setMaterial(const Material::MaterialData& material) {
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialSelector::setCustomMaterial(const Material::MaterialData& material) {
+void MaterialSelector::setCustomMaterial(const MaterialData& material) {
     m_CustomMaterial = material;
     m_MaterialColorPicker->setMaterial(material);
     if(m_ComboBox->currentIndex() == m_ComboBox->count() - 1) {

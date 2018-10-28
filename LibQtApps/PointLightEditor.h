@@ -14,15 +14,11 @@
 
 #pragma once
 
-#include <LibOpenGL/Lights.h>
+#include <LibOpenGL/Forward.h>
+#include <LibOpenGL/LightAndMaterialData.h>
 #include <LibQtApps/Forward.h>
 
 #include <QtWidgets>
-#include <vector>
-#include <memory>
-
-//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-#define MAX_POINT_LIGHT 4
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class PointLightEditor : public QWidget {
@@ -32,7 +28,7 @@ public:
     PointLightEditor(SharedPtr<PointLights> lights = nullptr, QWidget* parent = nullptr);
 
 public slots:
-    void changeLights(const StdVT<PointLights::PointLightData>& lightData);
+    void changeLights(const StdVT<PointLightData>& lightData);
     void setLightObject(const SharedPtr<PointLights>& lights);
     void lightToGUI();
 
@@ -43,12 +39,12 @@ private:
     void connectComponents();
     void applyLights();
 
-    QCheckBox*   m_CheckBoxes[MAX_POINT_LIGHT];
-    QLineEdit*   m_LightAmbients[MAX_POINT_LIGHT][3];
-    QLineEdit*   m_LightDiffuses[MAX_POINT_LIGHT][3];
-    QLineEdit*   m_LightSpeculars[MAX_POINT_LIGHT][3];
-    QLineEdit*   m_LightPositions[MAX_POINT_LIGHT][3];
-    ColorPicker* m_ColorSelectors[MAX_POINT_LIGHT][3];
+    QCheckBox*   m_CheckBoxes[LightData::MaxNLights];
+    QLineEdit*   m_LightAmbients[LightData::MaxNLights][3];
+    QLineEdit*   m_LightDiffuses[LightData::MaxNLights][3];
+    QLineEdit*   m_LightSpeculars[LightData::MaxNLights][3];
+    QLineEdit*   m_LightPositions[LightData::MaxNLights][3];
+    ColorPicker* m_ColorSelectors[LightData::MaxNLights][3];
 
     SharedPtr<PointLights> m_Lights = nullptr;
 };

@@ -13,8 +13,11 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 #include <LibOpenGL/Camera.h>
+#include <LibOpenGL/Lights.h>
 #include <LibOpenGL/OpenGLBuffer.h>
+#include <LibOpenGL/ShaderProgram.h>
 #include <LibOpenGL/RenderObjects.h>
+
 #include <LibQtApps/ClipPlaneEditor.h>
 #include <LibQtApps/FPSCounter.h>
 #include <LibQtApps/OpenGLWidget.h>
@@ -24,7 +27,7 @@ OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent), m_FPSCounte
     m_ClipPlaneEditor = new ClipPlaneEditor;
     connect(m_ClipPlaneEditor,   &ClipPlaneEditor::clipPlaneChanged, this, &OpenGLWidget::setClipPlane);
     ////////////////////////////////////////////////////////////////////////////////
-    m_UpdateTimer = std::make_unique<QTimer>(this);
+    m_UpdateTimer = std::make_shared<QTimer>(this);
     connect(m_UpdateTimer.get(), SIGNAL(timeout()),                  this, SLOT(update()));
     m_UpdateTimer->start(0);
     ////////////////////////////////////////////////////////////////////////////////
@@ -140,7 +143,7 @@ void OpenGLWidget::initializeGL() {
     glCall(glEnable(GL_DEPTH_TEST));
     glCall(glEnable(GL_MULTISAMPLE));
     ////////////////////////////////////////////////////////////////////////////////
-    m_CaptureImage = std::make_unique<QImage>(width(), height(), QImage::Format_RGB888);
+    m_CaptureImage = std::make_shared<QImage>(width(), height(), QImage::Format_RGB888);
     ////////////////////////////////////////////////////////////////////////////////
     // view matrix, prj matrix, inverse view matrix, inverse proj matrix, shadow matrix, cam position
     m_UBufferCamData = std::make_shared<OpenGLBuffer>();
@@ -384,7 +387,7 @@ void OpenGLWidget::initRDataLight() {
     m_Lights->setLightViewPerspective(30);
     m_Lights->uploadDataToGPU();
     ////////////////////////////////////////////////////////////////////////////////
-    m_LightRender = std::make_unique<PointLightRender>(m_Camera, m_Lights, m_UBufferCamData);
+    m_LightRender = std::make_shared<PointLightRender>(m_Camera, m_Lights, m_UBufferCamData);
     emit lightsObjChanged(m_Lights);
 }
 
@@ -395,7 +398,7 @@ void OpenGLWidget::renderLight() {
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void OpenGLWidget::setLights(const StdVT<PointLights::PointLightData>& lightData) {
+void OpenGLWidget::setLights(const StdVT<PointLightData>& lightData) {
     m_Lights->setNumLights(static_cast<int>(lightData.size()));
     for(int i = 0, iend = static_cast<int>(lightData.size()); i < iend; ++i) {
         m_Lights->setLight(lightData[i], i);
@@ -415,15 +418,15 @@ void OpenGLWidget::updateLights() {
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLWidget::initRDataSkyBox() {
     Q_ASSERT(m_UBufferCamData != nullptr);
-    m_SkyBoxRender = std::make_unique<SkyBoxRender>(m_Camera, QtAppUtils::getTexturePath() + "/Sky/", m_UBufferCamData);
+    m_SkyBoxRender = std::make_shared<SkyBoxRender>(m_Camera, QtAppUtils::getTexturePath() + "/Sky/", m_UBufferCamData);
 }
 
 void OpenGLWidget::initRDataCheckerboardBackground() {
-    m_CheckerboardRender = std::make_unique<CheckerboardBackgroundRender>();
+    m_CheckerboardRender = std::make_shared<CheckerboardBackgroundRender>();
 }
 
 void OpenGLWidget::initRDataGridBackground() {
-    m_GridRender = std::make_unique<GridBackgroundRender>();
+    m_GridRender = std::make_shared<GridBackgroundRender>();
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -486,7 +489,7 @@ void OpenGLWidget::renderGridBackground() {
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLWidget::initRDataFloor() {
     Q_ASSERT(m_UBufferCamData != nullptr && m_Lights != nullptr);
-    m_FloorRender = std::make_unique<PlaneRender>(m_Camera, m_Lights, QtAppUtils::getTexturePath() + "/Floor/", m_UBufferCamData);
+    m_FloorRender = std::make_shared<PlaneRender>(m_Camera, m_Lights, QtAppUtils::getTexturePath() + "/Floor/", m_UBufferCamData);
     m_FloorRender->setAllowNonTextureRender(false);
     m_FloorRender->setExposure(0.5f);
 }
@@ -537,7 +540,7 @@ void OpenGLWidget::renderFloor() {
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLWidget::initRDataBox() {
     Q_ASSERT(m_UBufferCamData != nullptr);
-    m_DomainBoxRender = std::make_unique<WireFrameBoxRender>(m_Camera, m_UBufferCamData);
+    m_DomainBoxRender = std::make_shared<WireFrameBoxRender>(m_Camera, m_UBufferCamData);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+

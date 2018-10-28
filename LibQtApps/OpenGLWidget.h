@@ -16,7 +16,7 @@
 
 #include <LibCommon/CommonSetup.h>
 #include <LibOpenGL/Forward.h>
-#include <LibOpenGL/Lights.h>
+#include <LibOpenGL/LightAndMaterialData.h>
 
 #include <LibQtApps/Forward.h>
 #include <LibQtApps/QtAppMacros.h>
@@ -95,7 +95,7 @@ protected:
     SharedPtr<FPSCounter> m_FPSCounter = nullptr;
 
     bool                    m_bLockCamera    = false;
-    UniquePtr<QTimer>       m_UpdateTimer    = nullptr;
+    SharedPtr<QTimer>       m_UpdateTimer    = nullptr;
     SharedPtr<OpenGLBuffer> m_UBufferCamData = nullptr;
     SharedPtr<Camera>       m_Camera         = nullptr;
 
@@ -123,7 +123,7 @@ public slots:
     bool exportScreenToImage(int frame);
 protected:
     QString           m_CaptureImageExt = QString("png");
-    UniquePtr<QImage> m_CaptureImage    = nullptr;
+    SharedPtr<QImage> m_CaptureImage    = nullptr;
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -148,13 +148,13 @@ protected:
 signals:
     void lightsObjChanged(const SharedPtr<PointLights>& lights);
 public slots:
-    void setLights(const StdVT<PointLights::PointLightData>& lightData);
+    void setLights(const StdVT<PointLightData>& lightData);
     void updateLights();
 protected:
     void initRDataLight();
     void renderLight();
     SharedPtr<PointLights>      m_Lights      = nullptr;
-    UniquePtr<PointLightRender> m_LightRender = nullptr;
+    SharedPtr<PointLightRender> m_LightRender = nullptr;
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -184,9 +184,9 @@ protected:
     void renderSkyBox();
     void renderCheckerboardBackground();
     void renderGridBackground();
-    UniquePtr<SkyBoxRender>                 m_SkyBoxRender       = nullptr;
-    UniquePtr<CheckerboardBackgroundRender> m_CheckerboardRender = nullptr;
-    UniquePtr<GridBackgroundRender>         m_GridRender         = nullptr;
+    SharedPtr<SkyBoxRender>                 m_SkyBoxRender       = nullptr;
+    SharedPtr<CheckerboardBackgroundRender> m_CheckerboardRender = nullptr;
+    SharedPtr<GridBackgroundRender>         m_GridRender         = nullptr;
     BackgroundMode                          m_BackgroundMode     = BackgroundMode::SkyBox;
     ////////////////////////////////////////////////////////////////////////////////
 
@@ -203,7 +203,7 @@ public slots:
 protected:
     void initRDataFloor();
     void renderFloor();
-    UniquePtr<PlaneRender> m_FloorRender = nullptr;
+    SharedPtr<PlaneRender> m_FloorRender = nullptr;
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ public slots:
 protected:
     void initRDataBox();
     void renderBox();
-    UniquePtr<WireFrameBoxRender> m_DomainBoxRender = nullptr;
+    SharedPtr<WireFrameBoxRender> m_DomainBoxRender = nullptr;
     bool                          m_bRenderBox      = true;
     ////////////////////////////////////////////////////////////////////////////////
 

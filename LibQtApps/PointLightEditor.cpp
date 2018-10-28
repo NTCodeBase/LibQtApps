@@ -12,6 +12,7 @@
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
+#include <LibOpenGL/Lights.h>
 #include <LibQtApps/ColorPicker.h>
 #include <LibQtApps/PointLightEditor.h>
 
@@ -19,9 +20,9 @@
 PointLightEditor::PointLightEditor(SharedPtr<PointLights> lights /*= nullptr*/, QWidget* parent /*= nullptr*/)
     : QWidget(parent), m_Lights(lights) {
     QVBoxLayout* mainLayout = new QVBoxLayout;
-    QGridLayout* lightLayouts[MAX_POINT_LIGHT];
+    QGridLayout* lightLayouts[LightData::MaxNLights];
 
-    for(int i = 0; i < MAX_POINT_LIGHT; ++i) {
+    for(int i = 0; i < LightData::MaxNLights; ++i) {
         lightLayouts[i] = new QGridLayout;
         m_CheckBoxes[i] = new QCheckBox(QString("Enable Light %1").arg(i));
         m_CheckBoxes[i]->setEnabled((i == 1));
@@ -96,7 +97,7 @@ void PointLightEditor::setLightObject(const SharedPtr<PointLights>& lights) {
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void PointLightEditor::changeLights(const StdVT<PointLights::PointLightData>& lightData) {
+void PointLightEditor::changeLights(const StdVT<PointLightData>& lightData) {
     m_Lights->setNumLights(static_cast<Int>(lightData.size()));
     for(Int i = 0, iend = static_cast<Int>(lightData.size()); i < iend; ++i) {
         m_Lights->setLight(lightData[i], i);
@@ -124,14 +125,14 @@ void PointLightEditor::lightToGUI() {
             m_LightPositions[i][j]->setText(QString("%1").arg(position[j], 8, 'g', 6));
         }
     }
-    for(int i = m_Lights->getNumLights(); i < MAX_POINT_LIGHT; ++i) {
+    for(int i = m_Lights->getNumLights(); i < LightData::MaxNLights; ++i) {
         m_CheckBoxes[i]->setChecked(false);
     }
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void PointLightEditor::connectComponents() {
-    for(int i = 0; i < MAX_POINT_LIGHT; ++i) {
+    for(int i = 0; i < LightData::MaxNLights; ++i) {
         connect(m_CheckBoxes[i], &QCheckBox::toggled, this,
                 [&, i](bool checked) {
                     for(int j = 0; j < 3; ++j) {
@@ -193,7 +194,7 @@ void PointLightEditor::connectComponents() {
         }
         ////////////////////////////////////////////////////////////////////////////////
         // only allow light i+1, i+2, .... to be enabled when light i was enabled
-        if(i < MAX_POINT_LIGHT - 1) {
+        if(i < LightData::MaxNLights - 1) {
             connect(m_CheckBoxes[i], &QCheckBox::toggled, this,
                     [&, i](bool checked) {
                         m_CheckBoxes[i + 1]->setEnabled(checked);
@@ -210,8 +211,8 @@ void PointLightEditor::applyLights() {
     assert(m_Lights != nullptr);
     ////////////////////////////////////////////////////////////////////////////////
     // update the number of active lights
-    int numPointLights = MAX_POINT_LIGHT;
-    for(int i = 1; i < MAX_POINT_LIGHT; ++i) {
+    int numPointLights = LightData::MaxNLights;
+    for(int i = 1; i < LightData::MaxNLights; ++i) {
         if(!m_CheckBoxes[i]->isChecked()) {
             numPointLights = i;
             break;

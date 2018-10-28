@@ -21,7 +21,7 @@
 // MaterialEditor class
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-MaterialEditor::MaterialEditor(const Material::MaterialData& material /*= Material::MT_Emerald*/, QWidget* parent /*= nullptr*/) : QDialog(parent) {
+MaterialEditor::MaterialEditor(const MaterialData& material /*= BuildInMaterials::MT_Emerald*/, QWidget* parent /*= nullptr*/) : QDialog(parent) {
     setModal(true);
     setupGUI();
     setMaterial(material);
@@ -29,7 +29,7 @@ MaterialEditor::MaterialEditor(const Material::MaterialData& material /*= Materi
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialEditor::setMaterial(const Material::MaterialData& material) {
+void MaterialEditor::setMaterial(const MaterialData& material) {
     m_CurrentMaterial = material;
     m_AmbientColorPicker->setColor(QtAppUtils::floatToQColor(material.ambient));
     m_DiffuseColorPicker->setColor(QtAppUtils::floatToQColor(material.diffuse));
@@ -88,20 +88,20 @@ MaterialColorPicker::MaterialColorPicker(QWidget* parent /*= nullptr*/) : QWidge
     setMouseTracking(true);
     setAutoFillBackground(true);
     setMaterial(m_MaterialEditor->getMaterial());
-    connect(m_MaterialEditor, &MaterialEditor::materialChanged, this, [&](const Material::MaterialData& material) {
+    connect(m_MaterialEditor, &MaterialEditor::materialChanged, this, [&](const MaterialData& material) {
                 setMaterial(material);
                 emit materialChanged(material);
             });
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialColorPicker::setMaterial(const Material::MaterialData& material) {
+void MaterialColorPicker::setMaterial(const MaterialData& material) {
     m_MaterialEditor->setMaterial(material);
     setWidgetColor(material);
 }
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-void MaterialColorPicker::setWidgetColor(const Material::MaterialData& material) {
+void MaterialColorPicker::setWidgetColor(const MaterialData& material) {
     QPalette palette = this->palette();
     palette.setColor(QPalette::Window, QtAppUtils::floatToQColor(material.diffuse));
     setPalette(palette);

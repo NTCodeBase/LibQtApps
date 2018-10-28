@@ -23,7 +23,7 @@ class MaterialSelector : public QWidget {
     Q_OBJECT
 
 public:
-    MaterialSelector(const Material::MaterialData& material = Material::MT_Emerald, bool defaultCustomMaterial = false,
+    MaterialSelector(const MaterialData& material = BuildInMaterials::MT_Emerald, bool defaultCustomMaterial = false,
                      int comboBoxSpan = 4, QWidget* parent = nullptr);
 
     void setDefaultCustomMaterial(bool defaultCustomMaterial);
@@ -35,24 +35,24 @@ public:
 public slots:
     void setEnabled(bool enabled);
     void setMaterial(int materialID);
-    void setMaterial(const Material::MaterialData& material);
-    void setCustomMaterial(const Material::MaterialData& material);
+    void setMaterial(const MaterialData& material);
+    void setCustomMaterial(const MaterialData& material);
     void setDebug(bool bDebug) { m_bDebug = bDebug; }
 
 signals:
-    void materialChanged(const Material::MaterialData& material);
+    void materialChanged(const MaterialData& material);
 
 private:
     QColor floatToQColor(float r, float g, float b) { return QColor(static_cast<int>(255 * r), static_cast<int>(255 * g), static_cast<int>(255 * b)); }
     QColor floatToQColor(const Vec3f& color) { return floatToQColor(color.x, color.y, color.z); }
     Vec3f  QColorToFloat(const QColor& color) { return Vec3f(color.redF(), color.greenF(), color.blueF()); }
 
-    bool                                m_bDebug   = false;
-    EnhancedComboBox*                   m_ComboBox = nullptr;
-    QGroupBox*                          m_GroupBox = nullptr;
-    QGridLayout*                        m_Layout   = nullptr;
-    MaterialColorPicker*                m_MaterialColorPicker;
-    Material::MaterialData              m_CurrentMaterial;
-    Material::MaterialData              m_CustomMaterial;
-    std::vector<Material::MaterialData> m_Materials;
+    bool                      m_bDebug   = false;
+    EnhancedComboBox*         m_ComboBox = nullptr;
+    QGroupBox*                m_GroupBox = nullptr;
+    QGridLayout*              m_Layout   = nullptr;
+    MaterialColorPicker*      m_MaterialColorPicker;
+    MaterialData              m_CurrentMaterial;
+    MaterialData              m_CustomMaterial;
+    std::vector<MaterialData> m_Materials;
 };
