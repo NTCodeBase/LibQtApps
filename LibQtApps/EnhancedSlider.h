@@ -34,6 +34,10 @@ public:
     void setValue(int value);
     int  getValue() const;
 
+    int getMinValue() const { return m_Slider->minimum(); }
+    int getMaxValue() const { return m_Slider->maximum(); }
+    auto getRange() const { return std::make_pair(getMinValue(), getMaxValue()); }
+
 public slots:
     void setEnabled(bool enabled);
     void prevItem();
