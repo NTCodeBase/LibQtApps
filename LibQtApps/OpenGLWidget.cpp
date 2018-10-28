@@ -555,7 +555,8 @@ void OpenGLWidget::setBox(const Vec3f& boxMin, const Vec3f& boxMax) {
     Q_ASSERT(m_DomainBoxRender != nullptr);
     if(isValid()) {
         makeCurrent();
-        m_DomainBoxRender->setBox(boxMin, boxMax); doneCurrent();
+        m_DomainBoxRender->setBox(boxMin, boxMax);
+        doneCurrent();
     }
 }
 
