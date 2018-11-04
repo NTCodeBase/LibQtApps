@@ -24,7 +24,7 @@ class OpenGLMainWindow : public QMainWindow {
     Q_OBJECT
 public:
     OpenGLMainWindow(QWidget* parent, bool bShowFPS = true, bool bShowCamPosition = true);
-
+    virtual ~OpenGLMainWindow() = default;
     virtual bool processKeyPressEvent(QKeyEvent* ev);
     virtual bool processKeyReleaseEvent(QKeyEvent*) { return false; }
 
