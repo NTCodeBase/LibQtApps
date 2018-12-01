@@ -48,8 +48,13 @@ using OpenGLFunctions = QOpenGLFunctions_4_1_Core;
 #   define __func__ __FUNCTION__
 #endif
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+#include <LibCommon/Logger/Logger.h>
 #define __NTQT_RunMainWindow(MainWindowClass, argc, argv, vsync)                                                              \
     {                                                                                                                         \
+        signal(SIGINT,  Logger::signalHandler);                                                                               \
+        signal(SIGSEGV, Logger::signalHandler);                                                                               \
+        signal(SIGTERM, Logger::signalHandler);                                                                               \
+        signal(SIGABRT, Logger::signalHandler);                                                                               \
         QSurfaceFormat format;                                                                                                \
         format.setDepthBufferSize(24);                                                                                        \
         format.setStencilBufferSize(8);                                                                                       \
