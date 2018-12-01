@@ -47,7 +47,7 @@ bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev) {
     switch(ev->key()) {
         case Qt::Key_Escape:
             close();
-            __NT_RAISE_ABORT_SIGNAL
+            __NT_RAISE_NORMAL_EXIT_SIGNAL
 
         case Qt::Key_X:
             m_GLWidget->enableClipPlane(!m_GLWidget->isClipPlaneEnabled());
