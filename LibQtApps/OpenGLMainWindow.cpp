@@ -46,6 +46,7 @@ OpenGLMainWindow::OpenGLMainWindow(QWidget* parent, bool bShowFPS /*= true*/, bo
 bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev) {
     switch(ev->key()) {
         case Qt::Key_Escape:
+            close();
             Logger::cleanupAll(-1);
             QApplication::quit();
 
