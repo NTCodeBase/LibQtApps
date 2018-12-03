@@ -47,7 +47,8 @@ bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev) {
     switch(ev->key()) {
         case Qt::Key_Escape:
             close();
-            Logger::cleanupAll(-1);
+            Logger::flushAll(-1);
+            Logger::shutdown();
             QApplication::quit();
 
         case Qt::Key_X:
