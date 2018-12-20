@@ -88,10 +88,12 @@ protected:
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
-    OpenGLWidget*     m_GLWidget              = nullptr;
-    QTabWidget*       m_MainTab               = new QTabWidget;
-    QVBoxLayout*      m_MainLayout            = new QVBoxLayout;
-    PointLightEditor* m_LightEditor           = nullptr;
-    QWidget*          m_RenderControllers     = new QWidget;
-    QVBoxLayout*      m_LayoutMainControllers = new QVBoxLayout;
+    OpenGLWidget*     m_GLWidget                 = nullptr;
+    QTabWidget*       m_MainTab                  = new QTabWidget;
+    QVBoxLayout*      m_MainLayout               = new QVBoxLayout;
+    PointLightEditor* m_LightEditor              = nullptr;
+    QWidget*          m_RenderControllers        = new QWidget;
+    QWidget*          m_TextureControllers       = new QWidget;
+    QVBoxLayout*      m_LayoutMainControllers    = new QVBoxLayout;
+    QVBoxLayout*      m_LayoutTextureControllers = new QVBoxLayout;
 };

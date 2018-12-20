@@ -41,13 +41,16 @@ void OpenGLController::setupBasicGUI(int width) {
     setupFloorControllers();
     setupBoxControllers();
     ////////////////////////////////////////////////////////////////////////////////
+    m_LayoutTextureControllers->addStretch();
     m_RenderControllers->setLayout(m_LayoutMainControllers);
+    m_TextureControllers->setLayout(m_LayoutTextureControllers);
     m_LightEditor = new PointLightEditor(nullptr, this);
     ////////////////////////////////////////////////////////////////////////////////
     m_MainTab->setTabPosition(QTabWidget::South);
     m_MainTab->setTabShape(QTabWidget::Triangular);
-    m_MainTab->addTab(m_RenderControllers, "Main Controllers");
-    m_MainTab->addTab(m_LightEditor,       "Lights");
+    m_MainTab->addTab(m_RenderControllers,  "Main Controllers");
+    m_MainTab->addTab(m_LightEditor,        "Lights");
+    m_MainTab->addTab(m_TextureControllers, "Textures");
     ////////////////////////////////////////////////////////////////////////////////
     m_MainLayout->addWidget(m_MainTab);
     setupButtons();
@@ -210,7 +213,7 @@ void OpenGLController::setupBackgroundControllers() {
     ////////////////////////////////////////////////////////////////////////////////
     m_grBackgroundCtrl = new QGroupBox("Background");
     m_grBackgroundCtrl->setLayout(layoutBackground);
-    m_LayoutMainControllers->addWidget(m_grBackgroundCtrl);
+    m_LayoutTextureControllers->addWidget(m_grBackgroundCtrl);
     ////////////////////////////////////////////////////////////////////////////////
     m_smBackgroundMode = new QSignalMapper;
     connect(rdbBackgroundSkyBox,       SIGNAL(clicked()), m_smBackgroundMode, SLOT(map()));
@@ -273,7 +276,7 @@ void OpenGLController::setupFloorControllers() {
     ////////////////////////////////////////////////////////////////////////////////
     m_grFloorCtrl = new QGroupBox("Floor Texture");
     m_grFloorCtrl->setLayout(floorLayout);
-    m_LayoutMainControllers->addWidget(m_grFloorCtrl);
+    m_LayoutTextureControllers->addWidget(m_grFloorCtrl);
     ////////////////////////////////////////////////////////////////////////////////
     loadFloorTextures();
 }
