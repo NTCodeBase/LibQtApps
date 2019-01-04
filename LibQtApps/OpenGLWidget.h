@@ -28,6 +28,8 @@
 #include <QDir>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+namespace NTCodeBase {
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 class OpenGLWidget : public QOpenGLWidget, public OpenGLFunctions {
     Q_OBJECT
     friend class OpenGLMainWindow;
@@ -187,7 +189,7 @@ protected:
     SharedPtr<SkyBoxRender>                 m_SkyBoxRender       = nullptr;
     SharedPtr<CheckerboardBackgroundRender> m_CheckerboardRender = nullptr;
     SharedPtr<GridBackgroundRender>         m_GridRender         = nullptr;
-    BackgroundMode                          m_BackgroundMode     = BackgroundMode::SkyBox;
+    BackgroundMode m_BackgroundMode = BackgroundMode::SkyBox;
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +218,7 @@ protected:
     void initRDataBox();
     void renderBox();
     SharedPtr<WireFrameBoxRender> m_DomainBoxRender = nullptr;
-    bool                          m_bRenderBox      = true;
+    bool m_bRenderBox = true;
     ////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////////////////////////////////////////////////////////
@@ -239,3 +241,5 @@ protected:
     void renderGizmo();
     ////////////////////////////////////////////////////////////////////////////////
 };
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+} // end namespace NTCodeBase

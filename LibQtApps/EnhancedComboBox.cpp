@@ -15,6 +15,8 @@
 #include <LibQtApps/EnhancedComboBox.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+namespace NTCodeBase {
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 EnhancedComboBox::EnhancedComboBox(int comboBoxSpan /*= 3*/, QWidget* parent /*= nullptr*/) : QWidget(parent) {
     m_ComboBox = new QComboBox;
     connect(m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged),           [&](int idx) { emit currentIndexChanged(idx); });
@@ -85,3 +87,6 @@ void EnhancedComboBox::nextItem() {
         m_ComboBox->setCurrentIndex(0);
     }
 }
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+} // end namespace NTCodeBase

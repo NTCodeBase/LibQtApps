@@ -18,6 +18,8 @@
 #include <ArthurStyle/arthurstyle.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+namespace NTCodeBase {
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 OpenGLMainWindow::OpenGLMainWindow(QWidget* parent, bool bShowFPS /*= true*/, bool bShowCamPosition /*= true*/) : QMainWindow(parent) {
     qApp->installEventFilter(this);
     m_VSync = (QSurfaceFormat::defaultFormat().swapInterval() > 0);
@@ -138,3 +140,6 @@ void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget) {
     connect(m_GLWidget->m_FPSCounter.get(), &FPSCounter::fpsChanged,                  this, &OpenGLMainWindow::updateStatusFrameRate);
     connect(m_GLWidget,                     &OpenGLWidget::cameraPositionInfoChanged, this, &OpenGLMainWindow::updateStatusCameraInfo);
 }
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+} // end namespace NTCodeBase

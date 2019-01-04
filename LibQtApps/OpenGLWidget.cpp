@@ -23,6 +23,8 @@
 #include <LibQtApps/OpenGLWidget.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+namespace NTCodeBase {
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 OpenGLWidget::OpenGLWidget(QWidget* parent) : QOpenGLWidget(parent), m_FPSCounter(std::make_shared<FPSCounter>()), m_Camera(std::make_shared<Camera>()) {
     m_ClipPlaneEditor = new ClipPlaneEditor;
     connect(m_ClipPlaneEditor,   &ClipPlaneEditor::clipPlaneChanged, this, &OpenGLWidget::setClipPlane);
@@ -591,3 +593,6 @@ void OpenGLWidget::renderGizmo() {
     glCall(glBindVertexArray(0));
     m_RDataGizmo.shader->release();
 }
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+} // end namespace NTCodeBase

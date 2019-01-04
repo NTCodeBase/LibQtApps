@@ -15,6 +15,8 @@
 #include <LibQtApps/EnhancedSlider.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+namespace NTCodeBase {
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 EnhancedSlider::EnhancedSlider(int sliderSpan /*= 5*/, QWidget* parent /*= nullptr*/) : QWidget(parent) {
     m_Slider = new QSlider(Qt::Horizontal);
     m_Slider->setRange(0, 100);
@@ -109,3 +111,6 @@ void EnhancedSlider::setEnabled(bool enabled) {
     m_Slider->setEnabled(enabled);
     m_SpinBox->setEnabled(enabled);
 }
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+} // end namespace NTCodeBase

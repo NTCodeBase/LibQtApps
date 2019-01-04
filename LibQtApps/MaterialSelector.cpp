@@ -17,6 +17,8 @@
 #include <LibQtApps/MaterialSelector.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+namespace NTCodeBase {
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 MaterialSelector::MaterialSelector(const MaterialData& material /*= BuildInMaterials::MT_Emerald*/, bool defaultCustomMaterial /*= false*/,
                                    int comboBoxSpan /*= 4*/, QWidget* parent /*= nullptr*/) : QWidget(parent), m_CurrentMaterial(material) {
     m_ComboBox = new EnhancedComboBox;
@@ -134,3 +136,6 @@ void MaterialSelector::setCustomMaterial(const MaterialData& material) {
     QColor color(floatToQColor(material.diffuse));
     m_ComboBox->getComboBox()->setItemData(m_ComboBox->count() - 1, color, Qt::DecorationRole);
 }
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+} // end namespace NTCodeBase

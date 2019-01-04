@@ -15,6 +15,8 @@
 #include <LibQtApps/DataList.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+namespace NTCodeBase {
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 DataList::DataList(QWidget* parent, bool bAddEmptyItem /*= true*/, bool bAddOrderText /*= true*/, QString indexSeparator /*= QString("::")*/) :
     QWidget(parent), m_bAddEmptyItem(bAddEmptyItem), m_bAddOrderText(bAddOrderText), m_IndexSeparator(indexSeparator) {
     setWindowTitle("Data List");
@@ -155,3 +157,6 @@ void DataList::setupGUI() {
                 }
             });
 }
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+} // end namespace NTCodeBase

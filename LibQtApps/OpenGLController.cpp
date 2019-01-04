@@ -21,6 +21,8 @@
 #include <LibQtApps/PointLightEditor.h>
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+namespace NTCodeBase {
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 OpenGLController::OpenGLController(OpenGLWidget* renderWidget, QWidget* parent, int width /*= 350*/, bool bShowBackgroundControllers /*= true*/,
                                    bool bShowFloorControllers /*= true*/, bool bShowBoxControllers /*= true*/) :
     QWidget(parent), m_GLWidget(renderWidget),
@@ -331,3 +333,6 @@ void OpenGLController::setupButtons() {
     m_MainLayout->addStretch();
     m_MainLayout->addLayout(m_LayoutButtons);
 }
+
+//-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+} // end namespace NTCodeBase
