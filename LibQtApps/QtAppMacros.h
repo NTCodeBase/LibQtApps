@@ -19,6 +19,8 @@
 
 #define OPENGL_MAJOR 4
 #define OPENGL_MINOR 1
+#include <QFileInfo>
+#include <QDir>
 #include <QOpenGLFunctions_4_1_Core>
 using OpenGLFunctions = QOpenGLFunctions_4_1_Core;
 
