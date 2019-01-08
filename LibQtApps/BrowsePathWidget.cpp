@@ -67,8 +67,8 @@ QGroupBox* BrowsePathWidget::getGroupBox(QString title) {
 void BrowsePathWidget::browse() {
     QString selectedPath = m_bFolderOnly ?
                            QFileDialog::getExistingDirectory(nullptr, QString("Select path"), m_CurrentPath,
-                                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks) :
-                           QFileDialog::getOpenFileName(nullptr, QString("Select file"), m_CurrentPath);
+                                                             QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks | QFileDialog::DontUseNativeDialog) :
+                           QFileDialog::getOpenFileName(nullptr, QString("Select file"), m_CurrentPath, QString(""), nullptr, QFileDialog::DontUseNativeDialog);
     if(selectedPath.trimmed() != "") {
         m_CurrentPath = selectedPath;
         m_txtPath->setText(m_CurrentPath);
