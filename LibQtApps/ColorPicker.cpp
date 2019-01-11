@@ -77,7 +77,7 @@ void ColorPicker::paintEvent(QPaintEvent* e) {
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void ColorPicker::mousePressEvent(QMouseEvent*) {
-    QColor color = QColorDialog::getColor(m_CurrentColor, this);
+    QColor color = QColorDialog::getColor(m_CurrentColor, this, "Select color", QColorDialog::DontUseNativeDialog);
     if(color.isValid()) {
         setColor(color);
 
