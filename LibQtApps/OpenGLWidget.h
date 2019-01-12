@@ -134,9 +134,10 @@ public:
     bool isClipPlaneEnabled() const { return m_bEnabledClipPlane; }
 signals:
     void clipPlaneEnabled(bool bEnable);
+    void clipPlaneChanged(const Vec4f& clipPlane);
 public slots:
     void enableClipPlane(bool bEnable);
-    void setClipPlane(const Vec4f& clipPlane) { m_ClipPlane = clipPlane; }
+    void setClipPlane(const Vec4f& clipPlane) { m_ClipPlane = clipPlane; emit clipPlaneChanged(clipPlane); }
     void showClipPlaneEditor();
 
 protected:
