@@ -48,10 +48,14 @@ OpenGLMainWindow::OpenGLMainWindow(QWidget* parent, bool bShowFPS /*= true*/, bo
 bool OpenGLMainWindow::processKeyPressEvent(QKeyEvent* ev) {
     switch(ev->key()) {
         case Qt::Key_Escape:
-            close();
-            Logger::flushAll(-1);
-            Logger::shutdown();
-            QApplication::quit();
+            if(auto reply = QMessageBox::question(this, "ESC pressed!", "Do you really want to quit?", QMessageBox::Yes | QMessageBox::No);
+               reply == QMessageBox::Yes) {
+                close();
+                Logger::flushAll(-1);
+                Logger::shutdown();
+                QApplication::quit();
+            }
+            return true;
 
         case Qt::Key_X:
             m_GLWidget->enableClipPlane(!m_GLWidget->isClipPlaneEnabled());
