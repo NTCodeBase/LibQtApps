@@ -29,7 +29,7 @@ OpenGLController::OpenGLController(OpenGLWidget* renderWidget, QWidget* parent, 
     m_bShowBackgroundControllers(bShowBackgroundControllers),
     m_bShowFloorControllers(bShowFloorControllers),
     m_bShowBoxControllers(bShowBoxControllers) {
-    __NT_REQUIRE(m_GLWidget != nullptr);
+    NT_REQUIRE(m_GLWidget != nullptr);
     setupBasicGUI(width);
     connectBasicWidgets();
     if(!m_bShowBackgroundControllers) { m_grBackgroundCtrl->setVisible(false); }

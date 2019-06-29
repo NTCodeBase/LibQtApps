@@ -83,7 +83,7 @@ protected:
     void checkGLExtensions(const QVector<QString>& extensions);
 
     ////////////////////////////////////////////////////////////////////////////////
-#ifdef __NT_DEBUG__
+#ifdef NT_DEBUG
     bool m_bPrintDebug = true;
 #else
     bool m_bPrintDebug = false;

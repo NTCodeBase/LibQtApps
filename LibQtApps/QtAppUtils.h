@@ -172,8 +172,8 @@ inline String loadResourceFile(const char* fileName) {
         return String("");
     }
 
-    QTextStream in (&file);
-    auto fileContent = in.readAll().toStdString();
+    QTextStream in(&file);
+    auto        fileContent = in.readAll().toStdString();
     file.close();
     return fileContent;
 }

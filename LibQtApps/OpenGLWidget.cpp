@@ -286,7 +286,7 @@ void OpenGLWidget::checkGLVersion() {
     if(!(major >= 4 && minor >= 1)) {
         QMessageBox msgBox(QMessageBox::Critical, "Error", QString("Your OpenGL version is %1.%2 (Required: OpenGL >= 4.1).").arg(major).arg(minor));
         msgBox.exec();
-        __NT_RAISE_TERMINATION_SIGNAL
+        NT_RAISE_TERMINATION_SIGNAL
     }
 }
 
@@ -305,7 +305,7 @@ void OpenGLWidget::checkGLExtensions(const QVector<QString>& extensions) {
     }
 
     if(!check) {
-        __NT_RAISE_TERMINATION_SIGNAL
+        NT_RAISE_TERMINATION_SIGNAL
     }
 }
 

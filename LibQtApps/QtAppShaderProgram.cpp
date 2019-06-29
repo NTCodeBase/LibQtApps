@@ -44,9 +44,9 @@ void QtAppShaderProgram::addFragmentShaderFromResource(const char* fileName) {
 void QtAppShaderProgram::loadResourceFile(std::string& fileContent, const char* fileName) {
     QFile file(fileName);
     if(!file.open(QFile::ReadOnly | QFile::Text)) {
-        __NT_DIE(QString("%1: Cannot open file %2 for reading!")
-                     .arg(QString::fromStdString(m_ProgramName))
-                     .arg(QString(fileName)));
+        NT_DIE(QString("%1: Cannot open file %2 for reading!")
+                   .arg(QString::fromStdString(m_ProgramName))
+                   .arg(QString(fileName)));
     }
     QTextStream in(&file);
     fileContent = in.readAll().toStdString();

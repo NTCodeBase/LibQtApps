@@ -15,7 +15,7 @@
 #pragma once
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-#define __NT_QT__
+#define NT_QT_FRAMEWORK
 
 #define OPENGL_MAJOR 4
 #define OPENGL_MINOR 1
@@ -26,18 +26,18 @@ using OpenGLFunctions = QOpenGLFunctions_4_1_Core;
 
 #include <QDebug>
 #include <QMessageBox>
-#ifdef __NT_ERROR
-#   undef __NT_ERROR
+#ifdef NT_ERROR
+#   undef NT_ERROR
 #endif
-#define __NT_ERROR(err)                                        \
+#define NT_ERROR(err)                                          \
     {                                                          \
         QMessageBox::critical(nullptr, QString("Error"), err); \
     }
 
-#ifdef __NT_INFO
-#   undef __NT_INFO
+#ifdef NT_INFO
+#   undef NT_INFO
 #endif
-#define __NT_INFO(info)                                           \
+#define NT_INFO(info)                                             \
     {                                                             \
         QMessageBox::information(nullptr, QString("Info"), info); \
     }

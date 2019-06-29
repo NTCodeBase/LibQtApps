@@ -135,7 +135,7 @@ void OpenGLMainWindow::updateStatusCameraInfo(const Vec3f& camPosition, const Ve
 
 //-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 void OpenGLMainWindow::setupOpenglWidget(OpenGLWidget* glWidget) {
-    __NT_REQUIRE(glWidget != nullptr);
+    NT_REQUIRE(glWidget != nullptr);
     if(m_GLWidget != nullptr) {
         delete m_GLWidget;
     }
